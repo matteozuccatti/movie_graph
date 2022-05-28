@@ -1,0 +1,6 @@
+/home/matteo/code/movie_graph/build/CMakeFiles/rebuild_cache.dir
+/home/matteo/code/movie_graph/build/CMakeFiles/edit_cache.dir
+/home/matteo/code/movie_graph/build/CMakeFiles/movie_graph.dir
+/home/matteo/code/movie_graph/build/include/CMakeFiles/rebuild_cache.dir
+/home/matteo/code/movie_graph/build/include/CMakeFiles/edit_cache.dir
+/home/matteo/code/movie_graph/build/include/CMakeFiles/SQL_parser.dir

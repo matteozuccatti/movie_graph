@@ -1,0 +1,2 @@
+/usr/bin/ar qc libSQL_parser.a  CMakeFiles/SQL_parser.dir/__/src/SQL_parser.cpp.o
+/usr/bin/ranlib libSQL_parser.a

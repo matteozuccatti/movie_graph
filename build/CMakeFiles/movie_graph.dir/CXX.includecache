@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/SQL_parser.hh
+iostream
+-
+iomanip
+-
+mysql/mysql.h
+-
+bits/stdc++.h
+-
+string
+-
+
+/home/matteo/code/movie_graph/main.cpp
+SQL_parser.hh
+/home/matteo/code/movie_graph/SQL_parser.hh
+iostream
+-
+

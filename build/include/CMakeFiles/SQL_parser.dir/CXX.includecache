@@ -17,6 +17,8 @@ bits/stdc++.h
 -
 string
 -
+vector
+-
 
 /home/matteo/code/movie_graph/src/SQL_parser.cpp
 ../include/SQL_parser.hh

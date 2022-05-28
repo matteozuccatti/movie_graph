@@ -28,7 +28,8 @@ MYSQL_RES* mysql_perform_query(MYSQL *connection, const char *sql_query){
     return mysql_use_result(connection);
 }
 
-void mainParse(){
+void movieParser(std::vector<std::pair<std::string, std::string>> &movieVec){
+
     MYSQL *con;	// the connection
     MYSQL_RES *res;	// the results
     MYSQL_ROW row;	// the results rows (array)
@@ -43,22 +44,28 @@ void mainParse(){
     con = mysql_connection_setup(mysqlD);
 
     // get the results from executing commands
-    res = mysql_perform_query(con, "select person_name from person where person_id in (select person_id from movie_cast where movie_id in (select movie_id from movie where movie_id in (select movie_id from movie_cast where person_id =  (select person_id from person where person_name = \"Johnny Depp\"))));");
+    res = mysql_perform_query(con, "select movie_id,title from movie where movie_id in (select movie_id from movie_cast where person_id =  (select person_id from person where person_name = \"Johnny Depp\"));");
 
-    std::cout << ("Database Output:\n") << std::endl;
+    std::cout << ("\nMovie list:\n") << std::endl;
     std::map<MYSQL_ROW, int> actorsMap; 
     std::map<MYSQL_ROW, int>::iterator actorsMap_it = actorsMap.begin();
 
     while ((row = mysql_fetch_row(res)) != NULL){
         // the below row[] parametes may change depending on the size of the table and your objective
-        std::cout.width(35); std::cout << std::left << row[0]; 
+        std::cout.width(7); std::cout << std::right << row[0]; 
+        std::cout << " | "; 
+        std::cout.width(25); std::cout << std::left << row[1];
         std::cout << std::endl;
+
+        movieVec.push_back(std::make_pair(row[0],row[1]));
     }
     // clean up the database result
     mysql_free_result(res);
     
     // close database connection
     mysql_close(con);
+
+    std::cout << " ------------------------------------------------------\n";
 
 }
 

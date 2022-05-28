@@ -1,3 +1,5 @@
+//https://www.databasestar.com/sample-database-movies/
+
 #include "../include/SQL_parser.hh"
 
 /*
@@ -47,8 +49,6 @@ void movieParser(std::vector<std::pair<std::string, std::string>> &movieVec){
     res = mysql_perform_query(con, "select movie_id,title from movie where movie_id in (select movie_id from movie_cast where person_id =  (select person_id from person where person_name = \"Johnny Depp\"));");
 
     std::cout << ("\nMovie list:\n") << std::endl;
-    std::map<MYSQL_ROW, int> actorsMap; 
-    std::map<MYSQL_ROW, int>::iterator actorsMap_it = actorsMap.begin();
 
     while ((row = mysql_fetch_row(res)) != NULL){
         // the below row[] parametes may change depending on the size of the table and your objective
@@ -59,15 +59,61 @@ void movieParser(std::vector<std::pair<std::string, std::string>> &movieVec){
 
         movieVec.push_back(std::make_pair(row[0],row[1]));
     }
+
     // clean up the database result
     mysql_free_result(res);
-    
     // close database connection
     mysql_close(con);
 
     std::cout << " ------------------------------------------------------\n";
-
 }
 
-//select movie_id, person_id from movie_cast where person_id =  (select person_id from person where person_name = "George Lucas");
-//select title from movie where movie_id in (select movie_id from movie_cast where person_id =  (select person_id from person where person_name = "George Lucas"));
+
+void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
+                 std::map<std::string, std::vector<std::string>> &actorMap){
+
+    MYSQL *con;	// the connection
+    MYSQL_RES *res;	// the results
+    MYSQL_ROW row;	// the results rows (array)
+
+    struct connection_details mysqlD;
+    mysqlD.server = "localhost";  // where the mysql database is
+    mysqlD.user = "root"; // user
+    mysqlD.password = "1L0ck3D97"; // the password for the database
+    mysqlD.database = "movies";	// the databse
+
+    // connect to the mysql database
+    con = mysql_connection_setup(mysqlD);
+
+    const char *sql_query1 = "select all person_name from person where person_id in (select person_id from movie_cast where movie_id in (\"";
+    const char *sql_query2 = "\"));";
+
+    for(int i=0; i<movieVec.size(); i++){
+
+        const char *movie_id = movieVec[i].first.c_str(); 
+        char sql_query_tmp[250];
+        std::strcpy(sql_query_tmp,sql_query1); 
+        std::strcat(sql_query_tmp,movie_id); 
+        std::strcat(sql_query_tmp,sql_query2); 
+
+        const char *sql_query = sql_query_tmp; 
+
+        res = mysql_perform_query(con, sql_query);
+
+        std::cout << ("\nActors list: ") << movieVec[i].second.c_str() << std::endl;
+
+        while ((row = mysql_fetch_row(res)) != NULL){
+            // the below row[] parametes may change depending on the size of the table and your objective
+            std::cout.width(40); std::cout << std::left << row[0]; 
+            std::cout << std::endl;
+
+            //movieVec.push_back(std::make_pair(row[0],row[1]));
+        }
+    }
+
+    // clean up the database result
+    mysql_free_result(res);
+    // close database connection
+    mysql_close(con);
+
+}

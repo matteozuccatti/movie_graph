@@ -88,6 +88,9 @@ void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
     const char *sql_query1 = "select all person_name from person where person_id in (select person_id from movie_cast where movie_id in (\"";
     const char *sql_query2 = "\"));";
 
+     std::map<std::string, std::vector<std::string>>::iterator it = actorMap.begin(); 
+     std::string actorName;
+
     for(int i=0; i<movieVec.size(); i++){
 
         const char *movie_id = movieVec[i].first.c_str(); 
@@ -104,10 +107,18 @@ void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
 
         while ((row = mysql_fetch_row(res)) != NULL){
             // the below row[] parametes may change depending on the size of the table and your objective
-            std::cout.width(40); std::cout << std::left << row[0]; 
-            std::cout << std::endl;
+            //std::cout.width(40); std::cout << std::left << row[0]; 
+            //std::cout << std::endl;
 
-            //movieVec.push_back(std::make_pair(row[0],row[1]));
+            actorName = row[0];
+            it = actorMap.find(actorName);
+            if(it==actorMap.end()){
+                // New actor
+                std::vector<std::string> movieV = {movieVec[i].second};
+                actorMap.insert({actorName,movieV});
+            }else{
+                it->second.push_back(movieVec[i].second);
+            }
         }
     }
 
@@ -116,4 +127,21 @@ void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
     // close database connection
     mysql_close(con);
 
+}
+
+void printActorMap(std::map<std::string, std::vector<std::string>> &actorMap){
+    std::map<std::string, std::vector<std::string>>::iterator it = actorMap.begin(); 
+    while(it!=actorMap.end()){
+        std::cout << "ACTOR : ";
+        std::cout.width(15); std::cout<< std::left << it->first;
+        std::cout << " | "; 
+
+        for(int i=0; i<it->second.size(); i++){
+            std::cout << it->second[i] << " "; 
+        }
+        
+        std::cout << std::endl;
+
+        it++;
+    }
 }

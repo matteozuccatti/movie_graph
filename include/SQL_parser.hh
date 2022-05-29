@@ -20,3 +20,5 @@ MYSQL_RES* mysql_perform_query(MYSQL *connection, const char *sql_query);
 void movieParser(std::vector<std::pair<std::string, std::string>> &movieVec);
 void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
                  std::map<std::string, std::vector<std::string>> &actorMap);
+
+void printActorMap(std::map<std::string, std::vector<std::string>> &actorMap);

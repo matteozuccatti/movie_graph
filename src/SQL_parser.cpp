@@ -46,7 +46,7 @@ void movieParser(std::vector<std::pair<std::string, std::string>> &movieVec){
     con = mysql_connection_setup(mysqlD);
 
     // get the results from executing commands
-    res = mysql_perform_query(con, "select movie_id,title from movie where movie_id in (select movie_id from movie_cast where person_id =  (select person_id from person where person_name = \"Johnny Depp\"));");
+    res = mysql_perform_query(con, "select movie_id,title from movie where movie_id in (select movie_id from movie_cast where person_id =  (select person_id from person where person_name = \"Leonardo DiCaprio\"));");
 
     std::cout << ("\nMovie list:\n") << std::endl;
 
@@ -62,7 +62,7 @@ void movieParser(std::vector<std::pair<std::string, std::string>> &movieVec){
 
 
 void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
-                 std::map<std::string, Actor> &actorMap){
+                 std::vector<Actor> &actors){
 
     MYSQL *con;	// the connection
     MYSQL_RES *res;	// the results
@@ -80,7 +80,7 @@ void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
     const char *sql_query1 = "select all person_name,person_id from person where person_id in (select person_id from movie_cast where movie_id in (\"";
     const char *sql_query2 = "\"));";
 
-     std::map<std::string, Actor>::iterator it = actorMap.begin(); 
+     std::vector<Actor>::iterator it = actors.begin(); 
      std::string actorName, actorId;
 
     for(int i=0; i<movieVec.size(); i++){
@@ -98,16 +98,16 @@ void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
         while ((row = mysql_fetch_row(res)) != NULL){
             actorName = row[0];
             actorId   = row[1];
-            it = actorMap.find(actorName);
-            if(it==actorMap.end()){
+            Actor act(actorName, actorId); 
+
+            it = std::find(actors.begin(), actors.end(), act);
+            if(it==actors.end()){
                 // New actor
-                Actor act; 
-                act.actorName = actorName;
-                act.actorId   = actorId;
                 act.commonMovies.push_back(movieVec[i].second);
-                actorMap.insert({actorName,act});
+                actors.push_back(act);
             }else{
-                it->second.commonMovies.push_back(movieVec[i].second);
+                // Exsistent
+                it->commonMovies.push_back(movieVec[i].second);
             }
         }
     }
@@ -117,7 +117,7 @@ void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
     mysql_close(con);
 }
 
-void movieCounter(std::map<std::string, Actor> &actorMap){
+void movieCounter(std::vector<Actor> &actors){
 
     // Initialize SQL connection 
     MYSQL *con;	// the connection
@@ -137,10 +137,10 @@ void movieCounter(std::map<std::string, Actor> &actorMap){
     const char *sql_query1 = "select movie_id from movie where movie_id in (select movie_id from movie_cast where person_id =  (select person_id from person where person_id = \"";
     const char *sql_query2 = "\"));"; 
 
-    std::map<std::string, Actor>::iterator it = actorMap.begin(); 
-    while(it != actorMap.end()){
+    std::vector<Actor>::iterator it = actors.begin(); 
+    while(it != actors.end()){
 
-        const char *actorId = it->second.actorId.c_str(); 
+        const char *actorId = it->actorId.c_str(); 
         char sql_query_tmp[250];
         std::strcpy(sql_query_tmp,sql_query1); 
         std::strcat(sql_query_tmp,actorId); 
@@ -150,24 +150,25 @@ void movieCounter(std::map<std::string, Actor> &actorMap){
         res = mysql_perform_query(con, sql_query);
 
         while ((row = mysql_fetch_row(res)) != NULL){
-            it->second.allMovies++;
+            it->allMovies++;
         }
+        it->commonMovies_number = it->commonMovies.size();
         it++; 
     }
 }
 
-void printActorMap(std::map<std::string, Actor> &actorMap){
+void printActorMap(std::vector<Actor> &actors){
 
-    std::map<std::string, Actor>::iterator it = actorMap.begin(); 
-    while(it!=actorMap.end()){
-        std::cout.width(26); std::cout<< std::left << it->first << "(";
-        std::cout.width(2);  std::cout<< std::right << it->second.allMovies; 
+    std::vector<Actor>::iterator it = actors.begin(); 
+    while(it!=actors.end()){
+        std::cout.width(26); std::cout<< std::left << it->actorName << "(";
+        std::cout.width(2);  std::cout<< std::right << it->allMovies; 
         std::cout << ") | "; 
 
-        for(int i=0; i<it->second.commonMovies.size(); i++){
+        for(int i=0; i<it->commonMovies.size(); i++){
             if(i!=0)
                 std::cout.width(33); std::cout << "";
-            std::cout << it->second.commonMovies[i] << "\n"; 
+            std::cout << it->commonMovies[i] << "\n"; 
         }
         it++;
     }

@@ -6,10 +6,10 @@ int main(){
     std::vector<std::pair<std::string, std::string>> movieVec; 
     movieParser(movieVec);
 
-    std::map<std::string, Actor> actorMap;
-    actorParser(movieVec,actorMap);
-    movieCounter(actorMap);
-    printActorMap(actorMap);
+    std::vector<Actor> actors;
+    actorParser(movieVec,actors);
+    movieCounter(actors);
+    printActorMap(actors);
 
     return 0; 
 }

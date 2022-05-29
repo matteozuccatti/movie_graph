@@ -6,7 +6,7 @@ int main(){
     std::vector<std::pair<std::string, std::string>> movieVec; 
     movieParser(movieVec);
 
-    std::map<std::string, std::vector<std::string>> actorMap;
+    std::map<std::string, Actor> actorMap;
     actorParser(movieVec,actorMap);
     
     printActorMap(actorMap);

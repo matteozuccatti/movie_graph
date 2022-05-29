@@ -70,7 +70,7 @@ void movieParser(std::vector<std::pair<std::string, std::string>> &movieVec){
 
 
 void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
-                 std::map<std::string, std::vector<std::string>> &actorMap){
+                 std::map<std::string, Actor> &actorMap){
 
     MYSQL *con;	// the connection
     MYSQL_RES *res;	// the results
@@ -88,7 +88,7 @@ void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
     const char *sql_query1 = "select all person_name from person where person_id in (select person_id from movie_cast where movie_id in (\"";
     const char *sql_query2 = "\"));";
 
-     std::map<std::string, std::vector<std::string>>::iterator it = actorMap.begin(); 
+     std::map<std::string, Actor>::iterator it = actorMap.begin(); 
      std::string actorName;
 
     for(int i=0; i<movieVec.size(); i++){
@@ -103,45 +103,38 @@ void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
 
         res = mysql_perform_query(con, sql_query);
 
-        std::cout << ("\nActors list: ") << movieVec[i].second.c_str() << std::endl;
-
         while ((row = mysql_fetch_row(res)) != NULL){
-            // the below row[] parametes may change depending on the size of the table and your objective
-            //std::cout.width(40); std::cout << std::left << row[0]; 
-            //std::cout << std::endl;
-
             actorName = row[0];
             it = actorMap.find(actorName);
             if(it==actorMap.end()){
                 // New actor
-                std::vector<std::string> movieV = {movieVec[i].second};
-                actorMap.insert({actorName,movieV});
+                Actor act; 
+                act.actorName = actorName;
+                act.commonMovies.push_back(movieVec[i].second);
+                actorMap.insert({actorName,act});
             }else{
-                it->second.push_back(movieVec[i].second);
+                it->second.commonMovies.push_back(movieVec[i].second);
             }
         }
     }
-
     // clean up the database result
     mysql_free_result(res);
     // close database connection
     mysql_close(con);
-
 }
 
-void printActorMap(std::map<std::string, std::vector<std::string>> &actorMap){
-    std::map<std::string, std::vector<std::string>>::iterator it = actorMap.begin(); 
+void printActorMap(std::map<std::string, Actor> &actorMap){
+
+    std::map<std::string, Actor>::iterator it = actorMap.begin(); 
     while(it!=actorMap.end()){
-        std::cout << "ACTOR : ";
-        std::cout.width(15); std::cout<< std::left << it->first;
+        std::cout.width(22); std::cout<< std::left << it->first;
         std::cout << " | "; 
 
-        for(int i=0; i<it->second.size(); i++){
-            std::cout << it->second[i] << " "; 
+        for(int i=0; i<it->second.commonMovies.size(); i++){
+            if(i!=0)
+                std::cout.width(25); std::cout << "";
+            std::cout << it->second.commonMovies[i] << "\n"; 
         }
-        
-        std::cout << std::endl;
-
         it++;
     }
 }

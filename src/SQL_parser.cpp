@@ -159,6 +159,8 @@ void movieCounter(std::vector<Actor> &actors){
 
 void printActorMap(std::vector<Actor> &actors){
 
+    std::sort(actors.begin(), actors.end());
+
     std::vector<Actor>::iterator it = actors.begin(); 
     while(it!=actors.end()){
         std::cout.width(26); std::cout<< std::left << it->actorName << "(";

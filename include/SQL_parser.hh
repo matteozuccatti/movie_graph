@@ -32,6 +32,9 @@ public:
     bool operator==(const Actor &a) const {
         return(this->actorId == a.actorId);
     }
+    bool operator<(const Actor &a) const {
+        return(this->allMovies > a.allMovies);
+    }
 
 };
 

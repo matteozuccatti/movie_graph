@@ -6,5 +6,5 @@ CXX_FLAGS =    -Dcimg_use_xshm -Dcimg_use_xrandr
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/matteo/code/movie_graph/include -I/home/matteo/code/movie_graph 
+CXX_INCLUDES = -I/home/matteo/code/movie_graph 
 

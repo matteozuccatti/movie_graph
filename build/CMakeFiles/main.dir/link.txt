@@ -1,0 +1,1 @@
+/usr/bin/c++     -Dcimg_use_xshm -Dcimg_use_xrandr   CMakeFiles/main.dir/main.cpp.o  -o main  /usr/lib/x86_64-linux-gnu/libz.so -lXext -lXrandr /usr/lib/x86_64-linux-gnu/libX11.so /usr/lib/x86_64-linux-gnu/libXext.so -lpthread 

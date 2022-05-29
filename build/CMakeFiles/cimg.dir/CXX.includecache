@@ -6,22 +6,6 @@
 
 #IncludeRegexTransform: 
 
-../include/SQL_parser.hh
-iostream
--
-iomanip
--
-mysql/mysql.h
--
-bits/stdc++.h
--
-string
--
-vector
--
-map
--
-
 /home/matteo/code/movie_graph/CImg.h
 cstdio
 -

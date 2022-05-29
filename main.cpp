@@ -8,7 +8,7 @@ int main(){
 
     std::map<std::string, Actor> actorMap;
     actorParser(movieVec,actorMap);
-    
+    movieCounter(actorMap);
     printActorMap(actorMap);
 
     return 0; 

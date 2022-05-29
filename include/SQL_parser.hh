@@ -16,6 +16,7 @@ struct connection_details
 
 class Actor{
 public:
+    std::string actorId = "";
     std::string actorName = ""; 
     std::vector<std::string> commonMovies = {}; 
     int allMovies = 0; 
@@ -27,5 +28,5 @@ MYSQL_RES* mysql_perform_query(MYSQL *connection, const char *sql_query);
 void movieParser(std::vector<std::pair<std::string, std::string>> &movieVec);
 void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
                  std::map<std::string, Actor> &actorMap);
-
+void movieCounter(std::map<std::string, Actor> &actorMap);
 void printActorMap(std::map<std::string, Actor> &actorMap);

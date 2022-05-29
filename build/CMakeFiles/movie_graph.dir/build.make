@@ -81,6 +81,7 @@ movie_graph: CMakeFiles/movie_graph.dir/main.cpp.o
 movie_graph: CMakeFiles/movie_graph.dir/build.make
 movie_graph: include/libSQL_parser.a
 movie_graph: include/libSQL_parser.a
+movie_graph: include/libgraph_drawer.a
 movie_graph: /usr/lib/x86_64-linux-gnu/libz.so
 movie_graph: /usr/lib/x86_64-linux-gnu/libX11.so
 movie_graph: /usr/lib/x86_64-linux-gnu/libXext.so

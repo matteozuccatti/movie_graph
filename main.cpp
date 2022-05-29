@@ -1,8 +1,8 @@
 #include "SQL_parser.hh"
 #include <iostream>
-#include "CImg.h"
+#include "graph_drawer.hh"
 
-using namespace cimg_library;
+
 
 int main(){
 /*
@@ -14,7 +14,7 @@ int main(){
     movieCounter(actors);
     printActorMap(actors);
 */
-
+/*
     unsigned int w = 300; 
     unsigned int h = 400; 
     const unsigned char blue[] = {0, 255,10}; 
@@ -32,7 +32,9 @@ int main(){
         dsp.wait();
     }
     std::getchar();
+*/
 
+    testFunction();
 
     return 0; 
 }

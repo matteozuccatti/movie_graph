@@ -1,0 +1,2 @@
+/usr/bin/ar qc libgraph_drawer.a  CMakeFiles/graph_drawer.dir/__/src/graph_drawer.cpp.o
+/usr/bin/ranlib libgraph_drawer.a

@@ -124,6 +124,19 @@ movie_graph/fast:
 .PHONY : movie_graph/fast
 
 #=============================================================================
+# Target rules for targets named graph_drawer
+
+# Build rule for target.
+graph_drawer: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 graph_drawer
+.PHONY : graph_drawer
+
+# fast build rule for target.
+graph_drawer/fast:
+	$(MAKE) -f include/CMakeFiles/graph_drawer.dir/build.make include/CMakeFiles/graph_drawer.dir/build
+.PHONY : graph_drawer/fast
+
+#=============================================================================
 # Target rules for targets named SQL_parser
 
 # Build rule for target.
@@ -172,6 +185,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... movie_graph"
+	@echo "... graph_drawer"
 	@echo "... SQL_parser"
 	@echo "... main.o"
 	@echo "... main.i"

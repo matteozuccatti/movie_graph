@@ -3,5 +3,5 @@
 
 CMakeFiles/movie_graph.dir/main.cpp.o
  ../include/SQL_parser.hh
- /home/matteo/code/movie_graph/CImg.h
+ ../include/graph_drawer.hh
  /home/matteo/code/movie_graph/main.cpp

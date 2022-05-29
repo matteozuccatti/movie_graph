@@ -269,4 +269,4 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CIMG_CFLAGS}")
 
 
 
-target_link_libraries(${PROJECT_NAME} PUBLIC SQL_parser mysqlclient ${SYSTEM_LIBS})
+target_link_libraries(${PROJECT_NAME} PUBLIC SQL_parser graph_drawer mysqlclient ${SYSTEM_LIBS})

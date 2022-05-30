@@ -4,5 +4,4 @@
 /home/matteo/code/movie_graph/build/include/CMakeFiles/rebuild_cache.dir
 /home/matteo/code/movie_graph/build/include/CMakeFiles/edit_cache.dir
 /home/matteo/code/movie_graph/build/include/CMakeFiles/canvas.dir
-/home/matteo/code/movie_graph/build/include/CMakeFiles/graph_drawer.dir
 /home/matteo/code/movie_graph/build/include/CMakeFiles/SQL_parser.dir

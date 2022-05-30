@@ -32,21 +32,13 @@ gtkmm/application.h
 gtkmm/window.h
 -
 
-../include/graph_drawer.hh
-
 /home/matteo/code/movie_graph/main.cpp
 SQL_parser.hh
 /home/matteo/code/movie_graph/SQL_parser.hh
 iostream
 -
-graph_drawer.hh
-/home/matteo/code/movie_graph/graph_drawer.hh
 canvas.h
 /home/matteo/code/movie_graph/canvas.h
-gtkmm/application.h
--
-gtkmm/window.h
--
 
 /usr/include/atk-1.0/atk/atk-enum-types.h
 atk/atkversion.h

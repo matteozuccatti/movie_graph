@@ -48,8 +48,6 @@ void movieParser(std::vector<std::pair<std::string, std::string>> &movieVec){
     // get the results from executing commands
     res = mysql_perform_query(con, "select movie_id,title from movie where movie_id in (select movie_id from movie_cast where person_id =  (select person_id from person where person_name = \"Leonardo DiCaprio\"));");
 
-    std::cout << ("\nMovie list:\n") << std::endl;
-
     while ((row = mysql_fetch_row(res)) != NULL){
         movieVec.push_back(std::make_pair(row[0],row[1]));
     }

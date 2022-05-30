@@ -74,7 +74,6 @@ clean: include/clean
 
 # Recursive "all" directory target.
 include/all: include/CMakeFiles/canvas.dir/all
-include/all: include/CMakeFiles/graph_drawer.dir/all
 include/all: include/CMakeFiles/SQL_parser.dir/all
 
 .PHONY : include/all
@@ -86,7 +85,6 @@ include/preinstall:
 
 # Recursive "clean" directory target.
 include/clean: include/CMakeFiles/canvas.dir/clean
-include/clean: include/CMakeFiles/graph_drawer.dir/clean
 include/clean: include/CMakeFiles/SQL_parser.dir/clean
 
 .PHONY : include/clean
@@ -95,17 +93,16 @@ include/clean: include/CMakeFiles/SQL_parser.dir/clean
 # Target rules for target CMakeFiles/movie_graph.dir
 
 # All Build rule for target.
-CMakeFiles/movie_graph.dir/all: include/CMakeFiles/graph_drawer.dir/all
-CMakeFiles/movie_graph.dir/all: include/CMakeFiles/SQL_parser.dir/all
 CMakeFiles/movie_graph.dir/all: include/CMakeFiles/canvas.dir/all
+CMakeFiles/movie_graph.dir/all: include/CMakeFiles/SQL_parser.dir/all
 	$(MAKE) -f CMakeFiles/movie_graph.dir/build.make CMakeFiles/movie_graph.dir/depend
 	$(MAKE) -f CMakeFiles/movie_graph.dir/build.make CMakeFiles/movie_graph.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/matteo/code/movie_graph/build/CMakeFiles --progress-num=7,8 "Built target movie_graph"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/matteo/code/movie_graph/build/CMakeFiles --progress-num=5,6 "Built target movie_graph"
 .PHONY : CMakeFiles/movie_graph.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/movie_graph.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/matteo/code/movie_graph/build/CMakeFiles 8
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/matteo/code/movie_graph/build/CMakeFiles 6
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/movie_graph.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/matteo/code/movie_graph/build/CMakeFiles 0
 .PHONY : CMakeFiles/movie_graph.dir/rule
@@ -146,33 +143,6 @@ canvas: include/CMakeFiles/canvas.dir/rule
 include/CMakeFiles/canvas.dir/clean:
 	$(MAKE) -f include/CMakeFiles/canvas.dir/build.make include/CMakeFiles/canvas.dir/clean
 .PHONY : include/CMakeFiles/canvas.dir/clean
-
-#=============================================================================
-# Target rules for target include/CMakeFiles/graph_drawer.dir
-
-# All Build rule for target.
-include/CMakeFiles/graph_drawer.dir/all:
-	$(MAKE) -f include/CMakeFiles/graph_drawer.dir/build.make include/CMakeFiles/graph_drawer.dir/depend
-	$(MAKE) -f include/CMakeFiles/graph_drawer.dir/build.make include/CMakeFiles/graph_drawer.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/matteo/code/movie_graph/build/CMakeFiles --progress-num=5,6 "Built target graph_drawer"
-.PHONY : include/CMakeFiles/graph_drawer.dir/all
-
-# Build rule for subdir invocation for target.
-include/CMakeFiles/graph_drawer.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/matteo/code/movie_graph/build/CMakeFiles 2
-	$(MAKE) -f CMakeFiles/Makefile2 include/CMakeFiles/graph_drawer.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/matteo/code/movie_graph/build/CMakeFiles 0
-.PHONY : include/CMakeFiles/graph_drawer.dir/rule
-
-# Convenience name for target.
-graph_drawer: include/CMakeFiles/graph_drawer.dir/rule
-
-.PHONY : graph_drawer
-
-# clean rule for target.
-include/CMakeFiles/graph_drawer.dir/clean:
-	$(MAKE) -f include/CMakeFiles/graph_drawer.dir/build.make include/CMakeFiles/graph_drawer.dir/clean
-.PHONY : include/CMakeFiles/graph_drawer.dir/clean
 
 #=============================================================================
 # Target rules for target include/CMakeFiles/SQL_parser.dir

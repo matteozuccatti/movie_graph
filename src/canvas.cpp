@@ -1,30 +1,47 @@
 #include "../include/canvas.h"
 
 
-
-void test();
-
-
-
 bool CCanvas::on_draw(Cairo::RefPtr<Cairo::Context> const & cr)
 {
-cr->set_source_rgb(1.,.5,.0);
-cr->set_line_width(3);
+    Gtk::Allocation allocation{ get_allocation() };
+    auto const width { (double)allocation.get_width() };
+    auto const height{ (double)allocation.get_height() };
 
-cr->move_to( 11, 11);
-cr->line_to(111,111);
-cr->stroke();
+    cr->set_source_rgb(1.,.5,.0);
+    cr->set_line_width(3);
 
-return true;
+    // line crossing the whole window
+    cr->move_to(    0,      0);
+    cr->line_to(width, height);
+    cr->stroke();
+
+    // circle gray
+    cr->set_source_rgb(.7,.7,.7);
+    cr->arc(width/2, height/2, 50, 0, 2*M_PI);
+    cr->fill();
+
+    // circle gray
+    cr->set_source_rgb(1,.1,.0);
+    cr->arc(0, 0, 100, 0, 2*M_PI);
+    cr->fill();
+
+    // circle gray
+    cr->set_source_rgb(1,.1,.0);
+    cr->arc(width, height, 100, 0, 2*M_PI);
+    cr->fill();
+    
+
+    return true;
 }
 
-int runWindow(){
+int runWindow()
+{
     int argc = 0; 
     char** argv = {}; 
     auto app = Gtk::Application::create(argc, argv, "org.gtkmm.cairo.tut");
 
     Gtk::Window window;
-    window.resize(800,600);
+    window.fullscreen();
     window.set_title("Cairo tutorial C++");
 
     CCanvas area;
@@ -32,5 +49,4 @@ int runWindow(){
     area.show();
 
     return app->run(window);
-    //return app->run(window);
 }

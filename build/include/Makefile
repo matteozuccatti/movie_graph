@@ -126,21 +126,6 @@ canvas/fast:
 .PHONY : canvas/fast
 
 # Convenience name for target.
-include/CMakeFiles/graph_drawer.dir/rule:
-	cd /home/matteo/code/movie_graph/build && $(MAKE) -f CMakeFiles/Makefile2 include/CMakeFiles/graph_drawer.dir/rule
-.PHONY : include/CMakeFiles/graph_drawer.dir/rule
-
-# Convenience name for target.
-graph_drawer: include/CMakeFiles/graph_drawer.dir/rule
-
-.PHONY : graph_drawer
-
-# fast build rule for target.
-graph_drawer/fast:
-	cd /home/matteo/code/movie_graph/build && $(MAKE) -f include/CMakeFiles/graph_drawer.dir/build.make include/CMakeFiles/graph_drawer.dir/build
-.PHONY : graph_drawer/fast
-
-# Convenience name for target.
 include/CMakeFiles/SQL_parser.dir/rule:
 	cd /home/matteo/code/movie_graph/build && $(MAKE) -f CMakeFiles/Makefile2 include/CMakeFiles/SQL_parser.dir/rule
 .PHONY : include/CMakeFiles/SQL_parser.dir/rule
@@ -209,33 +194,6 @@ __/src/canvas.cpp.s:
 	cd /home/matteo/code/movie_graph/build && $(MAKE) -f include/CMakeFiles/canvas.dir/build.make include/CMakeFiles/canvas.dir/__/src/canvas.cpp.s
 .PHONY : __/src/canvas.cpp.s
 
-__/src/graph_drawer.o: __/src/graph_drawer.cpp.o
-
-.PHONY : __/src/graph_drawer.o
-
-# target to build an object file
-__/src/graph_drawer.cpp.o:
-	cd /home/matteo/code/movie_graph/build && $(MAKE) -f include/CMakeFiles/graph_drawer.dir/build.make include/CMakeFiles/graph_drawer.dir/__/src/graph_drawer.cpp.o
-.PHONY : __/src/graph_drawer.cpp.o
-
-__/src/graph_drawer.i: __/src/graph_drawer.cpp.i
-
-.PHONY : __/src/graph_drawer.i
-
-# target to preprocess a source file
-__/src/graph_drawer.cpp.i:
-	cd /home/matteo/code/movie_graph/build && $(MAKE) -f include/CMakeFiles/graph_drawer.dir/build.make include/CMakeFiles/graph_drawer.dir/__/src/graph_drawer.cpp.i
-.PHONY : __/src/graph_drawer.cpp.i
-
-__/src/graph_drawer.s: __/src/graph_drawer.cpp.s
-
-.PHONY : __/src/graph_drawer.s
-
-# target to generate assembly for a file
-__/src/graph_drawer.cpp.s:
-	cd /home/matteo/code/movie_graph/build && $(MAKE) -f include/CMakeFiles/graph_drawer.dir/build.make include/CMakeFiles/graph_drawer.dir/__/src/graph_drawer.cpp.s
-.PHONY : __/src/graph_drawer.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -245,7 +203,6 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... canvas"
-	@echo "... graph_drawer"
 	@echo "... SQL_parser"
 	@echo "... __/src/SQL_parser.o"
 	@echo "... __/src/SQL_parser.i"
@@ -253,9 +210,6 @@ help:
 	@echo "... __/src/canvas.o"
 	@echo "... __/src/canvas.i"
 	@echo "... __/src/canvas.s"
-	@echo "... __/src/graph_drawer.o"
-	@echo "... __/src/graph_drawer.i"
-	@echo "... __/src/graph_drawer.s"
 .PHONY : help
 
 

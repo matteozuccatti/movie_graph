@@ -80,22 +80,7 @@ movie_graph_EXTERNAL_OBJECTS =
 movie_graph: CMakeFiles/movie_graph.dir/main.cpp.o
 movie_graph: CMakeFiles/movie_graph.dir/build.make
 movie_graph: include/libSQL_parser.a
-movie_graph: include/libSQL_parser.a
-movie_graph: include/libgraph_drawer.a
 movie_graph: include/libcanvas.a
-movie_graph: /usr/lib/x86_64-linux-gnu/libjpeg.so
-movie_graph: /usr/lib/x86_64-linux-gnu/libz.so
-movie_graph: /usr/lib/x86_64-linux-gnu/libpng.so
-movie_graph: /usr/lib/x86_64-linux-gnu/libz.so
-movie_graph: /usr/lib/x86_64-linux-gnu/libSM.so
-movie_graph: /usr/lib/x86_64-linux-gnu/libICE.so
-movie_graph: /usr/lib/x86_64-linux-gnu/libX11.so
-movie_graph: /usr/lib/x86_64-linux-gnu/libXext.so
-movie_graph: /usr/lib/x86_64-linux-gnu/libpng.so
-movie_graph: /usr/lib/x86_64-linux-gnu/libSM.so
-movie_graph: /usr/lib/x86_64-linux-gnu/libICE.so
-movie_graph: /usr/lib/x86_64-linux-gnu/libX11.so
-movie_graph: /usr/lib/x86_64-linux-gnu/libXext.so
 movie_graph: CMakeFiles/movie_graph.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/matteo/code/movie_graph/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable movie_graph"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/movie_graph.dir/link.txt --verbose=$(VERBOSE)

@@ -4,7 +4,6 @@
 CMakeFiles/movie_graph.dir/main.cpp.o
  ../include/SQL_parser.hh
  ../include/canvas.h
- ../include/graph_drawer.hh
  /home/matteo/code/movie_graph/main.cpp
  /usr/include/atk-1.0/atk/atk-enum-types.h
  /usr/include/atk-1.0/atk/atk.h

@@ -32,6 +32,8 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/share/cmake-3.16/Modules/Compiler/GNU-CXX.cmake"
   "/usr/share/cmake-3.16/Modules/Compiler/GNU.cmake"
   "/usr/share/cmake-3.16/Modules/FindBLAS.cmake"
+  "/usr/share/cmake-3.16/Modules/FindFontconfig.cmake"
+  "/usr/share/cmake-3.16/Modules/FindFreetype.cmake"
   "/usr/share/cmake-3.16/Modules/FindJPEG.cmake"
   "/usr/share/cmake-3.16/Modules/FindLAPACK.cmake"
   "/usr/share/cmake-3.16/Modules/FindPNG.cmake"
@@ -66,6 +68,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/movie_graph.dir/DependInfo.cmake"
+  "include/CMakeFiles/canvas.dir/DependInfo.cmake"
   "include/CMakeFiles/graph_drawer.dir/DependInfo.cmake"
   "include/CMakeFiles/SQL_parser.dir/DependInfo.cmake"
   )

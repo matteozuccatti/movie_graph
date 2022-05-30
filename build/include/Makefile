@@ -111,6 +111,21 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+include/CMakeFiles/canvas.dir/rule:
+	cd /home/matteo/code/movie_graph/build && $(MAKE) -f CMakeFiles/Makefile2 include/CMakeFiles/canvas.dir/rule
+.PHONY : include/CMakeFiles/canvas.dir/rule
+
+# Convenience name for target.
+canvas: include/CMakeFiles/canvas.dir/rule
+
+.PHONY : canvas
+
+# fast build rule for target.
+canvas/fast:
+	cd /home/matteo/code/movie_graph/build && $(MAKE) -f include/CMakeFiles/canvas.dir/build.make include/CMakeFiles/canvas.dir/build
+.PHONY : canvas/fast
+
+# Convenience name for target.
 include/CMakeFiles/graph_drawer.dir/rule:
 	cd /home/matteo/code/movie_graph/build && $(MAKE) -f CMakeFiles/Makefile2 include/CMakeFiles/graph_drawer.dir/rule
 .PHONY : include/CMakeFiles/graph_drawer.dir/rule
@@ -167,6 +182,33 @@ __/src/SQL_parser.cpp.s:
 	cd /home/matteo/code/movie_graph/build && $(MAKE) -f include/CMakeFiles/SQL_parser.dir/build.make include/CMakeFiles/SQL_parser.dir/__/src/SQL_parser.cpp.s
 .PHONY : __/src/SQL_parser.cpp.s
 
+__/src/canvas.o: __/src/canvas.cpp.o
+
+.PHONY : __/src/canvas.o
+
+# target to build an object file
+__/src/canvas.cpp.o:
+	cd /home/matteo/code/movie_graph/build && $(MAKE) -f include/CMakeFiles/canvas.dir/build.make include/CMakeFiles/canvas.dir/__/src/canvas.cpp.o
+.PHONY : __/src/canvas.cpp.o
+
+__/src/canvas.i: __/src/canvas.cpp.i
+
+.PHONY : __/src/canvas.i
+
+# target to preprocess a source file
+__/src/canvas.cpp.i:
+	cd /home/matteo/code/movie_graph/build && $(MAKE) -f include/CMakeFiles/canvas.dir/build.make include/CMakeFiles/canvas.dir/__/src/canvas.cpp.i
+.PHONY : __/src/canvas.cpp.i
+
+__/src/canvas.s: __/src/canvas.cpp.s
+
+.PHONY : __/src/canvas.s
+
+# target to generate assembly for a file
+__/src/canvas.cpp.s:
+	cd /home/matteo/code/movie_graph/build && $(MAKE) -f include/CMakeFiles/canvas.dir/build.make include/CMakeFiles/canvas.dir/__/src/canvas.cpp.s
+.PHONY : __/src/canvas.cpp.s
+
 __/src/graph_drawer.o: __/src/graph_drawer.cpp.o
 
 .PHONY : __/src/graph_drawer.o
@@ -202,11 +244,15 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... canvas"
 	@echo "... graph_drawer"
 	@echo "... SQL_parser"
 	@echo "... __/src/SQL_parser.o"
 	@echo "... __/src/SQL_parser.i"
 	@echo "... __/src/SQL_parser.s"
+	@echo "... __/src/canvas.o"
+	@echo "... __/src/canvas.i"
+	@echo "... __/src/canvas.s"
 	@echo "... __/src/graph_drawer.o"
 	@echo "... __/src/graph_drawer.i"
 	@echo "... __/src/graph_drawer.s"

@@ -266,7 +266,16 @@ endif()
 # Add CIMG Flags to Compilation Flags
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CIMG_CFLAGS}")
 
+find_package(PkgConfig)
+pkg_check_modules(GTKMM gtkmm-3.0)
 
 
+target_include_directories(${PROJECT_NAME}  PRIVATE ${GTKMM_INCLUDE_DIRS})
+target_link_directories(${PROJECT_NAME}  PRIVATE ${GTKMM_LIBRARY_DIRS})
+target_link_libraries(${PROJECT_NAME}  PRIVATE ${GTKMM_LIBRARIES})
 
-target_link_libraries(${PROJECT_NAME} PUBLIC SQL_parser graph_drawer mysqlclient ${SYSTEM_LIBS})
+target_link_libraries(
+  ${PROJECT_NAME} PUBLIC 
+  SQL_parser graph_drawer canvas 
+  mysqlclient ${SYSTEM_LIBS}
+)

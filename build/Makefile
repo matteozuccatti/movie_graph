@@ -124,6 +124,19 @@ movie_graph/fast:
 .PHONY : movie_graph/fast
 
 #=============================================================================
+# Target rules for targets named canvas
+
+# Build rule for target.
+canvas: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 canvas
+.PHONY : canvas
+
+# fast build rule for target.
+canvas/fast:
+	$(MAKE) -f include/CMakeFiles/canvas.dir/build.make include/CMakeFiles/canvas.dir/build
+.PHONY : canvas/fast
+
+#=============================================================================
 # Target rules for targets named graph_drawer
 
 # Build rule for target.
@@ -185,6 +198,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... movie_graph"
+	@echo "... canvas"
 	@echo "... graph_drawer"
 	@echo "... SQL_parser"
 	@echo "... main.o"

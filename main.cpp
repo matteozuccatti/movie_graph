@@ -1,10 +1,13 @@
 #include "SQL_parser.hh"
 #include <iostream>
 #include "graph_drawer.hh"
+#include "canvas.h"
+#include <gtkmm/application.h>
+#include <gtkmm/window.h>
 
 
 
-int main(){
+int main(int argc, char** argv){
 /*
     std::vector<std::pair<std::string, std::string>> movieVec; 
     movieParser(movieVec);
@@ -33,8 +36,21 @@ int main(){
     }
     std::getchar();
 */
+/*
+    auto app = Gtk::Application::create(argc, argv, "org.gtkmm.cairo.tut");
 
-    testFunction();
+    Gtk::Window window;
+    window.resize(800,600);
+    window.set_title("Cairo tutorial C++");
+
+    CCanvas area;
+    window.add(area);
+    area.show();
+
+    return app->run(window);
+*/
+    runWindow();
+    //testFunction();
 
     return 0; 
 }

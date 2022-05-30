@@ -3,7 +3,9 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/usr/include/gtkmm-3.0",
+                "/usr/include/glibmm-2.4"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/cpp",

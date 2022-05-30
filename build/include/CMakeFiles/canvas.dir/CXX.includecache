@@ -6,23 +6,7 @@
 
 #IncludeRegexTransform: 
 
-../include/SQL_parser.hh
-iostream
--
-iomanip
--
-mysql/mysql.h
--
-bits/stdc++.h
--
-string
--
-vector
--
-map
--
-
-../include/canvas.h
+/home/matteo/code/movie_graph/include/canvas.h
 gtkmm.h
 -
 gtkmm/drawingarea.h
@@ -32,21 +16,9 @@ gtkmm/application.h
 gtkmm/window.h
 -
 
-../include/graph_drawer.hh
-
-/home/matteo/code/movie_graph/main.cpp
-SQL_parser.hh
-/home/matteo/code/movie_graph/SQL_parser.hh
-iostream
--
-graph_drawer.hh
-/home/matteo/code/movie_graph/graph_drawer.hh
-canvas.h
-/home/matteo/code/movie_graph/canvas.h
-gtkmm/application.h
--
-gtkmm/window.h
--
+/home/matteo/code/movie_graph/src/canvas.cpp
+../include/canvas.h
+/home/matteo/code/movie_graph/include/canvas.h
 
 /usr/include/atk-1.0/atk/atk-enum-types.h
 atk/atkversion.h

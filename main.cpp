@@ -12,10 +12,9 @@ int main(int argc, char** argv){
 
     std::vector<Actor> actors;
     actorParser(movieVec,actors);
-    printActorMap(actors);
+    //printActorMap(actors);
 
-
-    runWindow();
+    //runWindow();
 
     return 0; 
 }

@@ -55,10 +55,11 @@ void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
     // close database connection
     mysql_close(con);
 
-    movieCounter(actors);
+    actorListInit(actors);
+    actorComputeForces(actors);
 }
 
-void movieCounter(std::vector<Actor> &actors){
+void actorListInit(std::vector<Actor> &actors){
 
     // Initialize SQL connection 
     MYSQL *con;	// the connection
@@ -74,27 +75,38 @@ void movieCounter(std::vector<Actor> &actors){
     // connect to the mysql database
     con = mysql_connection_setup(mysqlD);
 
-    // SQL query
+    // SQL query 
     const char *sql_query1 = "select movie_id from movie where movie_id in (select movie_id from movie_cast where person_id =  (select person_id from person where person_id = \"";
     const char *sql_query2 = "\"));"; 
 
+    // Run through the list of actors 
     std::vector<Actor>::iterator it = actors.begin(); 
     while(it != actors.end()){
+        // -- SPECIFIC ACTOR -- 
 
+        // Create query for specific actor 
         const char *actorId = it->actorId.c_str(); 
         char sql_query_tmp[250];
         std::strcpy(sql_query_tmp,sql_query1); 
         std::strcat(sql_query_tmp,actorId); 
         std::strcat(sql_query_tmp,sql_query2); 
-
         const char *sql_query = sql_query_tmp; 
+
+        // allMovies 
         res = mysql_perform_query(con, sql_query);
 
+        // Count how many movies the specific actor has
         while ((row = mysql_fetch_row(res)) != NULL){
             it->allMovies++;
         }
+
+        // commonMovies_number
         it->commonMovies_number = it->commonMovies.size();
         it++; 
+
+        // actors connected to the specific actor
+        it->connectedTo.push_back(main_actor);
+
     }
 }
 
@@ -123,3 +135,91 @@ void printActorMap(std::vector<Actor> &actors){
         it++;
     }
 }
+
+void actorComputeForces(std::vector<Actor> &actors){
+
+    std::vector<Actor>::iterator it = actors.begin(); 
+
+    while(it!=actors.end()){
+        it->computeRepulsiveForce(actors);
+        it->computeAttractiveForce(actors);
+        it->computeDisplacementForce();
+        it++;
+    }
+}
+
+void testFunction(){
+    std::vector<Actor> actors;
+    // Constructor 
+    Actor a0 = {"00", "Actor MAIN"};
+    Actor a1 = {"01", "Actor 1"};
+    Actor a3 = {"02", "Actor 2"};
+    Actor a2 = {"03", "Actor 3"};
+    // Common movies 
+    a1.commonMovies_number = 1; 
+    a1.commonMovies_number = 2;
+    a3.commonMovies_number = 2;
+    // Actor size 
+    a1.actorSize = 10; a1.springStiffness=10;  
+    a2.actorSize = 20; a2.springStiffness=20;  
+    a3.actorSize = 10; a3.springStiffness=10;  
+    // Connected to 
+    a1.connectedTo.push_back("Actor MAIN");
+    a2.connectedTo.push_back("Actor MAIN");
+    a3.connectedTo.push_back("Actor MAIN");
+
+    // Push actors into vector 
+    actors.push_back(a1); 
+    actors.push_back(a2); 
+    actors.push_back(a3); 
+
+
+}
+
+// ======================================================================== //
+//                              VECTOR CLASS                                //
+// ======================================================================== //
+
+void Vector::normalize(){
+    this->updateL();
+    this->x = this->getX() / this->getL();
+    this->y = this->getY() / this->getL();
+    this->updateL();
+}
+
+
+
+// ======================================================================== //
+//                              ACTOR CLASS                                 //
+// ======================================================================== //
+
+void Actor::computeRepulsiveForce(std::vector<Actor> &actors){
+
+    std::vector<Actor>::iterator it = actors.begin(); 
+
+    while(it!=actors.end()){
+        if(it->actorId != this->actorId){
+            
+        }
+        it++;
+    }
+}
+
+void Actor::computeAttractiveForce(std::vector<Actor> &actors){
+
+    std::vector<Actor>::iterator it = actors.begin(); 
+
+    while(it!=actors.end()){
+        if(it->actorId != this->actorId){
+
+        }
+        it++;
+    }
+}
+
+void Actor::computeDisplacementForce(){
+    this->f_displacement += this->f_repulsive;
+    this->f_displacement += this->f_attractive;
+
+}
+

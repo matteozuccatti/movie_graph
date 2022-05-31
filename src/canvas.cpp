@@ -40,9 +40,6 @@ bool CCanvas::on_draw(Cairo::RefPtr<Cairo::Context> const & cr)
     cr->arc(width/2, height/2, 50, 0, 2*M_PI);
     cr->fill();
 
-
-    
-
     return true;
 }
 

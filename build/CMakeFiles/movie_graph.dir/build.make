@@ -81,6 +81,7 @@ movie_graph: CMakeFiles/movie_graph.dir/main.cpp.o
 movie_graph: CMakeFiles/movie_graph.dir/build.make
 movie_graph: include/libSQL_parser.a
 movie_graph: include/libcanvas.a
+movie_graph: include/libactors.a
 movie_graph: CMakeFiles/movie_graph.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/matteo/code/movie_graph/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable movie_graph"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/movie_graph.dir/link.txt --verbose=$(VERBOSE)

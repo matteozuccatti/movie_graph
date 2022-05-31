@@ -21,4 +21,4 @@ target_link_libraries(${PROJECT_NAME}  PRIVATE ${GTKMM_LIBRARIES})
 
 target_link_libraries(
   ${PROJECT_NAME} PUBLIC 
-  SQL_parser  canvas mysqlclient )
+  SQL_parser canvas actors mysqlclient )

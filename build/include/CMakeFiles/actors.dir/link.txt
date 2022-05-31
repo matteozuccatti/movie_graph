@@ -1,0 +1,2 @@
+/usr/bin/ar qc libactors.a  CMakeFiles/actors.dir/__/src/actors.cpp.o
+/usr/bin/ranlib libactors.a

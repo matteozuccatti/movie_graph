@@ -52,5 +52,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/movie_graph.dir/DependInfo.cmake"
   "include/CMakeFiles/canvas.dir/DependInfo.cmake"
+  "include/CMakeFiles/actors.dir/DependInfo.cmake"
   "include/CMakeFiles/SQL_parser.dir/DependInfo.cmake"
   )

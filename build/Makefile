@@ -137,6 +137,19 @@ canvas/fast:
 .PHONY : canvas/fast
 
 #=============================================================================
+# Target rules for targets named actors
+
+# Build rule for target.
+actors: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 actors
+.PHONY : actors
+
+# fast build rule for target.
+actors/fast:
+	$(MAKE) -f include/CMakeFiles/actors.dir/build.make include/CMakeFiles/actors.dir/build
+.PHONY : actors/fast
+
+#=============================================================================
 # Target rules for targets named SQL_parser
 
 # Build rule for target.
@@ -186,6 +199,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... movie_graph"
 	@echo "... canvas"
+	@echo "... actors"
 	@echo "... SQL_parser"
 	@echo "... main.o"
 	@echo "... main.i"

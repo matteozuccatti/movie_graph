@@ -53,6 +53,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 set(CMAKE_TARGET_LINKED_INFO_FILES
   "/home/matteo/code/movie_graph/build/include/CMakeFiles/SQL_parser.dir/DependInfo.cmake"
   "/home/matteo/code/movie_graph/build/include/CMakeFiles/canvas.dir/DependInfo.cmake"
+  "/home/matteo/code/movie_graph/build/include/CMakeFiles/actors.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

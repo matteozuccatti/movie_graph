@@ -126,6 +126,21 @@ canvas/fast:
 .PHONY : canvas/fast
 
 # Convenience name for target.
+include/CMakeFiles/actors.dir/rule:
+	cd /home/matteo/code/movie_graph/build && $(MAKE) -f CMakeFiles/Makefile2 include/CMakeFiles/actors.dir/rule
+.PHONY : include/CMakeFiles/actors.dir/rule
+
+# Convenience name for target.
+actors: include/CMakeFiles/actors.dir/rule
+
+.PHONY : actors
+
+# fast build rule for target.
+actors/fast:
+	cd /home/matteo/code/movie_graph/build && $(MAKE) -f include/CMakeFiles/actors.dir/build.make include/CMakeFiles/actors.dir/build
+.PHONY : actors/fast
+
+# Convenience name for target.
 include/CMakeFiles/SQL_parser.dir/rule:
 	cd /home/matteo/code/movie_graph/build && $(MAKE) -f CMakeFiles/Makefile2 include/CMakeFiles/SQL_parser.dir/rule
 .PHONY : include/CMakeFiles/SQL_parser.dir/rule
@@ -167,6 +182,33 @@ __/src/SQL_parser.cpp.s:
 	cd /home/matteo/code/movie_graph/build && $(MAKE) -f include/CMakeFiles/SQL_parser.dir/build.make include/CMakeFiles/SQL_parser.dir/__/src/SQL_parser.cpp.s
 .PHONY : __/src/SQL_parser.cpp.s
 
+__/src/actors.o: __/src/actors.cpp.o
+
+.PHONY : __/src/actors.o
+
+# target to build an object file
+__/src/actors.cpp.o:
+	cd /home/matteo/code/movie_graph/build && $(MAKE) -f include/CMakeFiles/actors.dir/build.make include/CMakeFiles/actors.dir/__/src/actors.cpp.o
+.PHONY : __/src/actors.cpp.o
+
+__/src/actors.i: __/src/actors.cpp.i
+
+.PHONY : __/src/actors.i
+
+# target to preprocess a source file
+__/src/actors.cpp.i:
+	cd /home/matteo/code/movie_graph/build && $(MAKE) -f include/CMakeFiles/actors.dir/build.make include/CMakeFiles/actors.dir/__/src/actors.cpp.i
+.PHONY : __/src/actors.cpp.i
+
+__/src/actors.s: __/src/actors.cpp.s
+
+.PHONY : __/src/actors.s
+
+# target to generate assembly for a file
+__/src/actors.cpp.s:
+	cd /home/matteo/code/movie_graph/build && $(MAKE) -f include/CMakeFiles/actors.dir/build.make include/CMakeFiles/actors.dir/__/src/actors.cpp.s
+.PHONY : __/src/actors.cpp.s
+
 __/src/canvas.o: __/src/canvas.cpp.o
 
 .PHONY : __/src/canvas.o
@@ -203,10 +245,14 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... canvas"
+	@echo "... actors"
 	@echo "... SQL_parser"
 	@echo "... __/src/SQL_parser.o"
 	@echo "... __/src/SQL_parser.i"
 	@echo "... __/src/SQL_parser.s"
+	@echo "... __/src/actors.o"
+	@echo "... __/src/actors.i"
+	@echo "... __/src/actors.s"
 	@echo "... __/src/canvas.o"
 	@echo "... __/src/canvas.i"
 	@echo "... __/src/canvas.s"

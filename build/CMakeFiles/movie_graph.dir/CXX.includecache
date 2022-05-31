@@ -22,6 +22,16 @@ vector
 map
 -
 
+../include/actors.hh
+string
+-
+vector
+-
+iostream
+-
+SQL_parser.hh
+../include/SQL_parser.hh
+
 ../include/canvas.h
 gtkmm.h
 -
@@ -39,6 +49,8 @@ iostream
 -
 canvas.h
 /home/matteo/code/movie_graph/canvas.h
+actors.hh
+/home/matteo/code/movie_graph/actors.hh
 
 /usr/include/atk-1.0/atk/atk-enum-types.h
 atk/atkversion.h

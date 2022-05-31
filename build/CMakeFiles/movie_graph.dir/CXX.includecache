@@ -29,6 +29,8 @@ vector
 -
 iostream
 -
+math.h
+-
 SQL_parser.hh
 ../include/SQL_parser.hh
 

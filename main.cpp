@@ -12,7 +12,6 @@ int main(int argc, char** argv){
 
     std::vector<Actor> actors;
     actorParser(movieVec,actors);
-    movieCounter(actors);
     printActorMap(actors);
 
 

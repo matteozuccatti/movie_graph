@@ -54,6 +54,8 @@ void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
     mysql_free_result(res);
     // close database connection
     mysql_close(con);
+
+    movieCounter(actors);
 }
 
 void movieCounter(std::vector<Actor> &actors){

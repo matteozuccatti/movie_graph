@@ -6,7 +6,7 @@ bool CCanvas::on_draw(Cairo::RefPtr<Cairo::Context> const & cr)
     Gtk::Allocation allocation{ get_allocation() };
     auto const width { (double)allocation.get_width() };
     auto const height{ (double)allocation.get_height() };
-
+/*
     cr->set_source_rgb(1.,.5,.0);
     cr->set_line_width(3);
 
@@ -39,11 +39,44 @@ bool CCanvas::on_draw(Cairo::RefPtr<Cairo::Context> const & cr)
     cr->set_source_rgb(.7,.7,.7);
     cr->arc(width/2, height/2, 50, 0, 2*M_PI);
     cr->fill();
+*/  
+    Vector origin = Vector(width/2, height/2);
+    for(std::vector<Actor>::iterator it=actors.begin(); it!=actors.end(); it++){
+        // Normal nodes 
+        if(!it->mainActor){
+            // circle orange
+            cr->set_source_rgb(1.,.5,.0);
+            cr->arc(origin.getX()+it->pos.getX(),
+                    origin.getY()+it->pos.getY(),
+                    it->actorSize, 0, 2*M_PI);
+            cr->fill();
+
+            // line 
+            cr->set_source_rgb(1.,.5,.0);
+            cr->set_line_width(3);
+            cr->move_to(origin.getX(), origin.getY());
+            cr->line_to(origin.getX()+it->pos.getX(),
+                        origin.getY()+it->pos.getY());
+            cr->stroke();
+        }
+    }
+    for(std::vector<Actor>::iterator it=actors.begin(); it!=actors.end(); it++){
+        // Normal nodes 
+        if(it->mainActor){
+        // circle gray
+            cr->set_source_rgb(.7,.7,.7);
+            cr->arc(origin.getX()+it->pos.getX(),
+                    origin.getY()+it->pos.getY(),
+                    it->actorSize, 0, 2*M_PI);
+            cr->fill();
+        }
+    }
+    
 
     return true;
 }
 
-int runWindow()
+int runWindow(std::vector<Actor>  &actors)
 {
     int argc = 0; 
     char** argv = {}; 
@@ -54,6 +87,8 @@ int runWindow()
     window.set_title("Cairo tutorial C++");
 
     CCanvas area;
+    area.actors = actors;
+
     window.add(area);
     area.show();
 

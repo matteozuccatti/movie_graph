@@ -14,7 +14,13 @@ int main(int argc, char** argv){
     actorParser(movieVec,actors);
     //printActorMap(actors);
 
-    //runWindow();
+    std::vector<Actor>  act = testFunction();
+    printActorVec(act);
+    actorComputeForces(act);
+    printActorVec(act);
+
+    runWindow(act);
+
 
     return 0; 
 }

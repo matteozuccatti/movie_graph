@@ -43,6 +43,8 @@ gtkmm/application.h
 -
 gtkmm/window.h
 -
+actors.hh
+../include/actors.hh
 
 /home/matteo/code/movie_graph/main.cpp
 SQL_parser.hh

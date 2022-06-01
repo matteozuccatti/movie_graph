@@ -56,7 +56,7 @@ void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
     mysql_close(con);
 
     actorListInit(actors);
-    actorComputeForces(actors);
+    //actorComputeForces(actors);
 }
 
 void actorListInit(std::vector<Actor> &actors){
@@ -138,17 +138,35 @@ void printActorMap(std::vector<Actor> &actors){
 
 void actorComputeForces(std::vector<Actor> &actors){
 
-    std::vector<Actor>::iterator it = actors.begin(); 
+    std::vector<Actor>::iterator it;
+    long double iteration = 1;  
 
-    while(it!=actors.end()){
-        it->computeRepulsiveForce(actors);
-        it->computeAttractiveForce(actors);
-        it->computeDisplacementForce();
-        it++;
+    while((new_epsilon >= espilon_min) && (iteration < max_iteration)){
+        it = actors.begin();
+
+        //std::cout << " * COMPUTING FORCES\n";
+        while(it!=actors.end()){
+            it->computeRepulsiveForce(actors);
+            it->computeAttractiveForce(actors);
+            it->computeDisplacementForce();
+            it++;
+        }
+
+        //std::cout << " * COMPUTING POSITION\n";
+        it = actors.begin();
+        while(it!=actors.end()){
+            it->displacePos(iteration);
+            it->printActor();
+            std::cout << "cooling : " << cooling_factor(iteration);
+            it++;
+        }
+
+        iteration++;
     }
+    std::cout << "MINIMUM iteration : " << iteration << " MINIMUM epsilon : " << new_epsilon << std::endl; 
 }
 
-void testFunction(){
+std::vector<Actor> testFunction(){
     std::vector<Actor> actors;
     // Constructor 
     Actor a0 = {"00", "Actor MAIN"};
@@ -160,20 +178,47 @@ void testFunction(){
     a1.commonMovies_number = 2;
     a3.commonMovies_number = 2;
     // Actor size 
-    a1.actorSize = 10; a1.springStiffness=10;  
-    a2.actorSize = 20; a2.springStiffness=20;  
-    a3.actorSize = 10; a3.springStiffness=10;  
+    a0.actorSize = 35; a0.mainActor = true;
+    a1.actorSize = 15; a1.springStiffness=idealSpringL;  
+    a2.actorSize = 15; a2.springStiffness=idealSpringL;  
+    a3.actorSize = 15; a3.springStiffness=idealSpringL;  
     // Connected to 
     a1.connectedTo.push_back("Actor MAIN");
     a2.connectedTo.push_back("Actor MAIN");
     a3.connectedTo.push_back("Actor MAIN");
+    // Initial pos
+    a0.pos = Vector(0,0); 
+    a1.pos = Vector(50,50); 
+    a2.pos = Vector(-50,50); 
+    a3.pos = Vector(50,-50);
 
-    // Push actors into vector 
+    // Push actors into vector
+    actors.push_back(a0); 
     actors.push_back(a1); 
     actors.push_back(a2); 
     actors.push_back(a3); 
 
+    return actors;
+}
 
+void printActorVec(std::vector<Actor> &actors){
+    std::vector<Actor>::iterator it = actors.begin(); 
+
+    while(it!=actors.end()){
+        it->printActor();
+        it++;
+    }
+    std::cout << std::endl;
+}
+
+double cooling_factor(double long t){
+    double tmp_ret = 1.0/t; 
+    if (abs(tmp_ret) < 0.001){
+        return 0.001;
+    }else{
+        return tmp_ret;
+    }
+    
 }
 
 // ======================================================================== //
@@ -187,6 +232,11 @@ void Vector::normalize(){
     this->updateL();
 }
 
+void Vector::inverse(){
+    this->setX(-this->getX());
+    this->setY(-this->getY());
+}
+
 
 
 // ======================================================================== //
@@ -194,32 +244,88 @@ void Vector::normalize(){
 // ======================================================================== //
 
 void Actor::computeRepulsiveForce(std::vector<Actor> &actors){
+    if (this->mainActor)
+        return;
 
     std::vector<Actor>::iterator it = actors.begin(); 
-
     while(it!=actors.end()){
-        if(it->actorId != this->actorId){
-            
+        if(it->actorId != this->actorId && !it->mainActor){
+            Vector pv_pu = it->pos - this->pos;
+            pv_pu.updateL(); 
+            double mod = pv_pu.getL()+0.1;
+            pv_pu.normalize();
+            this->f_repulsive += pv_pu * (10.0 / pow(mod,3)); 
         }
         it++;
     }
 }
 
 void Actor::computeAttractiveForce(std::vector<Actor> &actors){
+    if (this->mainActor)
+        return;
 
     std::vector<Actor>::iterator it = actors.begin(); 
-
     while(it!=actors.end()){
-        if(it->actorId != this->actorId){
 
+        if (it->mainActor){
+            Vector pu_pv = (this->pos - it->pos); 
+            pu_pv.inverse();
+            pu_pv.updateL();
+            double mod = pu_pv.getL()+0.1;
+            pu_pv.normalize();
+            this->f_attractive += pu_pv * (1.0 *mod); 
         }
+
         it++;
     }
 }
 
 void Actor::computeDisplacementForce(){
-    this->f_displacement += this->f_repulsive;
-    this->f_displacement += this->f_attractive;
+    if (this->mainActor)
+        return;
+    this->f_displacement = this->f_repulsive + this->f_attractive;
+}
 
+void Actor::displacePos(long double iter){
+    if (this->mainActor)
+        return;
+    Vector displacement_pos = this->f_displacement * cooling_factor(iter);
+    displacement_pos.updateL();
+    double displacement     = displacement_pos.getL();
+
+    if (displacement > new_epsilon){
+        new_epsilon = displacement;
+        //std::cout << "*********** NEW MINIMUM ************* \n"; 
+        //std::cout << "new_epsilon : " << new_epsilon << " min_epsilon : " << espilon_min << "\n";
+    }
+
+    //std::cout << "minimum displacement : " << new_epsilon << std::endl;
+    this->pos += displacement_pos;
+}
+
+void Actor::resetForces(){
+    this->f_attractive = Vector(0.0,0.0); 
+    this->f_repulsive = Vector(0.0,0.0);
+}
+
+void Actor::printActor(){
+    std::cout << " Name: ";
+    std::cout.width(12); std::cout << std::left << actorName;
+
+    std::cout << " Main: ";  
+    std::cout.width(0); std::cout << std::left << mainActor;
+
+    std::cout << " f_rep: ";  
+    std::cout.width(4); std::cout << std::left << f_repulsive.getL();
+
+    std::cout << " f_att: ";  
+    std::cout.width(4); std::cout << std::left << f_attractive.getL();
+
+    std::cout << " POS: ";  
+    std::cout.width(10); std::cout << std::left << "[" << pos.getX() << "," << pos.getY() << "]";
+
+
+
+    std::cout << std::endl;
 }
 

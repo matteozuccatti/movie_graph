@@ -6,6 +6,34 @@
 
 #IncludeRegexTransform: 
 
+/home/matteo/code/movie_graph/include/SQL_parser.hh
+iostream
+-
+iomanip
+-
+mysql/mysql.h
+-
+bits/stdc++.h
+-
+string
+-
+vector
+-
+map
+-
+
+/home/matteo/code/movie_graph/include/actors.hh
+string
+-
+vector
+-
+iostream
+-
+math.h
+-
+SQL_parser.hh
+/home/matteo/code/movie_graph/include/SQL_parser.hh
+
 /home/matteo/code/movie_graph/include/canvas.h
 gtkmm.h
 -
@@ -15,6 +43,8 @@ gtkmm/application.h
 -
 gtkmm/window.h
 -
+actors.hh
+/home/matteo/code/movie_graph/include/actors.hh
 
 /home/matteo/code/movie_graph/src/canvas.cpp
 ../include/canvas.h

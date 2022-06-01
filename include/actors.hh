@@ -7,9 +7,11 @@
 
 #include "SQL_parser.hh"
 
-static double idealSpringL = 20.0; 
-static double espilon = 1.0; 
+static double idealSpringL = 1; 
+static double espilon_min = 0.01; 
+static double new_epsilon = espilon_min;
 static std::string main_actor = "Leonardo DiCaprio";
+static long double max_iteration = 1000;
 
 class Vector{
 private:
@@ -41,6 +43,7 @@ public:
 
     void updateL()  {this->L = sqrt(pow(this->x,2) + pow(this->y,2));}
     void normalize();
+    void inverse();
 
     // ------------------------------------------------------------------
 
@@ -65,14 +68,32 @@ public:
         Vector v = Vector(x_tmp,y_tmp);
         return v;
     }
+    friend Vector operator-(Vector const&v1, Vector const& v2){
+        double x_tmp = v1.getX() - v2.getX(); 
+        double y_tmp = v1.getY() - v2.getY();
+        Vector v = Vector(x_tmp,y_tmp);
+        return v;
+    }
+    friend Vector operator*(Vector const &v1, const double m){
+        double new_x = v1.getX() * m ; 
+        double new_y = v1.getY() * m ; 
+        Vector v = Vector(new_x,new_y);
+        return v;
+    }
+    friend Vector operator/(Vector const &v1, const double m){
+        double new_x = v1.getX() / m ; 
+        double new_y = v1.getY() / m ; 
+        Vector v = Vector(new_x,new_y);
+        return v;
+    }
 
 };
 class Actor{
 public:
-    Actor(std::string actorName_, std::string actorId_)
+    Actor(std::string actorId_ , std::string actorName_ )
     {
-        this->actorId =actorId_; 
-        this->actorName =actorName_;
+        this->actorId   = actorId_; 
+        this->actorName = actorName_;
     }
 
     // -----------------------------------------------
@@ -84,7 +105,7 @@ public:
     int allMovies = 0; 
     int actorSize = 0; 
     double springStiffness = 1;
-    Vector pos,f_repulsive,f_attractive,f_displacement; 
+    Vector pos,f_repulsive,f_attractive,f_displacement = Vector(0.0,0.0); 
     std::vector<std::string> connectedTo; 
     bool mainActor = false; 
 
@@ -93,7 +114,9 @@ public:
     void computeRepulsiveForce(std::vector<Actor> &actors);
     void computeAttractiveForce(std::vector<Actor> &actors);
     void computeDisplacementForce();
-    void displacePos();
+    void displacePos(long double iter);
+    void resetForces(); 
+    void printActor();
 
     // -----------------------------------------------
 
@@ -114,3 +137,8 @@ void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
 void actorListInit(std::vector<Actor> &actors);
 void actorComputeForces(std::vector<Actor> &actors);
 void printActorMap(std::vector<Actor> &actors);
+void printActorVec(std::vector<Actor> &actors);
+
+double cooling_factor(long double t);
+std::vector<Actor> testFunction();
+

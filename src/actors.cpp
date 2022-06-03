@@ -136,90 +136,6 @@ void printActorMap(std::vector<Actor> &actors){
     }
 }
 
-void actorComputeForces(std::vector<Actor> &actors){
-
-    std::vector<Actor>::iterator it;
-    long double iteration = 1;  
-
-    while((new_epsilon >= espilon_min) && (iteration < max_iteration)){
-        it = actors.begin();
-        new_epsilon = espilon_min; 
-
-        //std::cout << " * COMPUTING FORCES\n";
-        while(it!=actors.end()){
-            it->computeRepulsiveForce(actors);
-            it->computeAttractiveForce(actors);
-            it->computeDisplacementForce();
-            it++;
-        }
-
-        //std::cout << " * COMPUTING POSITION\n";
-        it = actors.begin();
-        while(it!=actors.end()){
-            it->displacePos(iteration);
-            it++;
-        }
-        iteration++;
-    }
-
-    it=actors.begin();
-    while(it!=actors.end()){
-        it->printActor();
-        it++;
-    }
-
-}
-
-std::vector<Actor> testFunction(){
-    std::vector<Actor> actors;
-    // Constructor 
-    Actor a0 = {"00", "Actor MAIN"};
-    Actor a1 = {"01", "Actor 1"};
-    Actor a2 = {"02", "Actor 2"};
-    Actor a3 = {"03", "Actor 3"};
-    Actor a4 = {"04", "Actor 4"};
-    // Common movies 
-    a1.commonMovies_number = 1; 
-    a1.commonMovies_number = 2;
-    a3.commonMovies_number = 2;
-    a4.commonMovies_number = 2;
-    // Actor size 
-    a0.actorSize = 35; a0.mainActor = true;
-    a1.actorSize = 15; a1.springStiffness=idealSpringL;  
-    a2.actorSize = 15; a2.springStiffness=idealSpringL;  
-    a3.actorSize = 15; a3.springStiffness=idealSpringL;  
-    a4.actorSize = 15; a4.springStiffness=idealSpringL;  
-    // Connected to 
-    a1.connectedTo.push_back("Actor MAIN");
-    a2.connectedTo.push_back("Actor MAIN");
-    a3.connectedTo.push_back("Actor MAIN");
-    a4.connectedTo.push_back("Actor MAIN");
-    // Initial pos
-    a0.pos = Vector(0,0); 
-    a1.pos = Vector(50,20); 
-    a2.pos = Vector(-50,20); 
-    a3.pos = Vector(50,-20);
-    a4.pos = Vector(-50,-20);
-
-    // Push actors into vector
-    actors.push_back(a0); 
-    actors.push_back(a1); 
-    actors.push_back(a2); 
-    actors.push_back(a3); 
-    //actors.push_back(a4); 
-
-    return actors;
-}
-
-void printActorVec(std::vector<Actor> &actors){
-    std::vector<Actor>::iterator it = actors.begin(); 
-
-    while(it!=actors.end()){
-        it->printActor();
-        it++;
-    }
-    std::cout << std::endl;
-}
 
 
 // ======================================================================== //
@@ -233,9 +149,13 @@ void Vector::normalize(){
     this->updateL();
 }
 
-void Vector::inverse(){
+void Vector::invert(){
     this->setX(-this->getX());
     this->setY(-this->getY());
+}
+
+Vector Vector::times(double m){
+    return Vector(this->getX()*m, this->getY()*m);
 }
 
 
@@ -243,86 +163,67 @@ void Vector::inverse(){
 //                              ACTOR CLASS                                 //
 // ======================================================================== //
 
-void Actor::computeRepulsiveForce(std::vector<Actor> &actors){
-    if (this->mainActor)
-        return;
 
-    std::vector<Actor>::iterator it = actors.begin(); 
-    while(it!=actors.end()){
-        if(it->actorId != this->actorId && !it->mainActor){          //&& !it->mainActor
-            Vector pu_pv = this->pos - it->pos; 
-            pu_pv.updateL();
-            double delta = pu_pv.getL();
-            if(delta < 0)
-                pu_pv.inverse();
-            pu_pv.normalize();
-            this->f_repulsive += pu_pv * (0.01/abs(delta)); 
+
+
+
+// ======================================================================== //
+//                               NODE CLASS                                 //
+// ======================================================================== //
+
+void Node::evaluateF_ext(){
+
+}
+
+void Node::evaluateF(){
+    evaluateF_ext();
+    f_tot =  x.times(k * (x0-(x.getL()))) + x_dot.times(-c) + f_ext;
+    //f_tot = f_tot.times(1/100);
+}
+
+void euler_method(Node &node){
+
+    if(!node.euler_complete){
+        double dT = 0.1; 
+        node.evaluateF(); 
+
+        Vector new_x     = node.x     + node.x_dot.times(dT); 
+        Vector new_x_dot = node.x_dot + node.f_tot.times(dT);
+
+        node.x     = new_x; 
+        node.x_dot = new_x_dot;
+
+        
+        if(isnan(node.x.getX())){
+            std::cout << "WARNING : nan \n";
+            node.euler_complete = true;
         }
+        
+        if(node.x_dot.getL() < 0.00001){
+            std::cout << "STOP SLOW \n";
+            node.euler_complete = true;
+        }
+        
+        /*
+        if(node.x.getL() < 1.5)
+            node.euler_complete = true;
+        */
+    }
+}
+
+void euler_method(std::vector<Node> &nodes){
+    std::vector<Node>::iterator it = nodes.begin();
+
+    while(it!=nodes.end()){
+        euler_method(*it); 
         it++;
     }
 }
 
-void Actor::computeAttractiveForce(std::vector<Actor> &actors){
-    if (this->mainActor)
-        return;
-
-    std::vector<Actor>::iterator it = actors.begin(); 
-    while(it!=actors.end()){
-
-        if (it->mainActor){
-            Vector pu_pv = this->pos - it->pos; 
-            pu_pv.updateL();
-            this->updatePosDot(); 
-            double delta = pu_pv.getL()-idealSpringL;
-            pu_pv.normalize();
-            this->f_attractive += pu_pv * (delta) - pu_pv * (this->pos_dot); 
-        }
-        it++;
+void testEuler(){
+    Node node_test; 
+    while(!node_test.euler_complete){
+        euler_method(node_test);
+        std::cout << node_test;
     }
 }
-
-void Actor::computeDisplacementForce(){
-    if (this->mainActor)
-        return;
-    this->f_displacement = this->f_repulsive + this->f_attractive;
-}
-
-void Actor::displacePos(long double iter){
-    if (this->mainActor)
-        return;
-    Vector displacement_pos = this->f_displacement ;
-
-    this->pos += displacement_pos;
-}
-
-void Actor::resetForces(){
-    this->f_attractive = Vector(0.0,0.0); 
-    this->f_repulsive  = Vector(0.0,0.0);
-}
-
-void Actor::updatePos(Vector &new_pos){
-    this->pos_dot = new_pos - this->pos; 
-    this->pos     = new_pos;
-}
-
-void Actor::printActor(){
-    std::cout << " Name: ";
-    std::cout.width(12); std::cout << std::left << actorName;
-
-    std::cout << " Main: ";  
-    std::cout.width(0); std::cout << std::left << mainActor;
-
-    std::cout << " f_rep: ";  
-    std::cout.width(4); std::cout << std::left << f_repulsive.getL();
-
-    std::cout << " f_att: ";  
-    std::cout.width(4); std::cout << std::left << f_attractive.getL();
-
-    std::cout << " POS: ";  
-    std::cout.width(10); std::cout << std::left << "[" << pos.getX() << "," << pos.getY() << "]";
-
-
-
-    std::cout << std::endl;
-}
-

@@ -15,7 +15,7 @@ public:
         }
 
     virtual ~CCanvas() { };
-    std::vector<Actor> actors;
+    std::vector<Node> actors;
 protected:
     // Override default signal handler:
     //bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr) override;
@@ -24,4 +24,4 @@ protected:
 
 }; // CCanvas
 
-int runWindow(std::vector<Actor>  &actors);
+int runWindow(std::vector<Node>  &actors);

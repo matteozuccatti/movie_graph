@@ -14,12 +14,14 @@ int main(int argc, char** argv){
     actorParser(movieVec,actors);
     //printActorMap(actors);
 
-    std::vector<Actor>  act = testFunction();
-    printActorVec(act);
-    actorComputeForces(act);
 
-    runWindow(act);
 
+    Node n1,n2; 
+    std::vector<Node> act = {n1,n2};
+    //runWindow(act); 
+
+
+    testEuler();
 
     return 0; 
 }

@@ -4,15 +4,14 @@
 #include <vector>
 #include <iostream>
 #include <math.h>
-
+#include <typeinfo>
 #include "SQL_parser.hh"
 
-static double idealSpringL = 150; 
-static double espilon_min = 2; 
-static double new_epsilon = espilon_min;
-static std::string main_actor = "Leonardo DiCaprio";
-static long double max_iteration = 25000;
 
+static std::string main_actor = "Leonardo DiCaprio"; 
+// ======================================================================== //
+//                              VECTOR CLASS                                //
+// ======================================================================== //
 class Vector{
 private:
     double x; 
@@ -43,7 +42,8 @@ public:
 
     void updateL()  {this->L = sqrt(pow(this->x,2) + pow(this->y,2));}
     void normalize();
-    void inverse();
+    void invert();
+    Vector times(double m);
 
     // ------------------------------------------------------------------
 
@@ -74,6 +74,7 @@ public:
         Vector v = Vector(x_tmp,y_tmp);
         return v;
     }
+    /*
     friend Vector operator*(Vector const &v1, const double m){
         double new_x = v1.getX() * m ; 
         double new_y = v1.getY() * m ; 
@@ -86,8 +87,15 @@ public:
         Vector v = Vector(new_x,new_y);
         return v;
     }
+    */
 
 };
+
+
+// ======================================================================== //
+//                              ACTOR CLASS                                 //
+// ======================================================================== //
+
 class Actor{
 public:
     Actor(std::string actorId_ , std::string actorName_ )
@@ -104,20 +112,11 @@ public:
     int commonMovies_number = 0; 
     int allMovies = 0; 
     int actorSize = 0; 
-    double springStiffness = 1;
-    Vector pos, pos_dot, f_repulsive,f_attractive,f_displacement = Vector(0.0,0.0); 
-    std::vector<std::string> connectedTo; 
-    bool mainActor = false; 
+
+    std::vector<std::string> connectedTo = {};
 
     // -----------------------------------------------
 
-    void computeRepulsiveForce(std::vector<Actor> &actors);
-    void computeAttractiveForce(std::vector<Actor> &actors);
-    void computeDisplacementForce();
-    void displacePos(long double iter);
-    void resetForces(); 
-
-    void updatePos(); 
     void printActor();
 
     // -----------------------------------------------
@@ -134,12 +133,54 @@ public:
 
 };
 
+
+// ======================================================================== //
+//                               NODE CLASS                                 //
+// ======================================================================== //
+
+class Node{
+public: 
+    // State variables
+    Vector x_ddot = Vector(0.0,0.0); 
+    Vector x_dot  = Vector(0.0,0.0); 
+    Vector x      = Vector(1,0.0); 
+
+    Vector f_ext  = Vector(0.0,0.0);
+    Vector f_tot  = Vector(0.0,0.0);
+
+    // Physical properties  
+    double k  = 5;   // spring coefficient
+    double x0 = 5;   // spring lenght neutral 
+    double c  = 5;   // damper coefficient 
+
+    // Functions 
+    bool euler_complete = false; 
+    void evaluateF_ext();
+    void evaluateF();
+
+    // ----------------------------------------------------------------------
+
+    friend std::ostream &operator<<(std::ostream &output, const Node &n ) {
+        output << "NODE PRINT p:[" << n.x.getX() << "," << n.x.getY()  << "]=>" << n.x.getL() 
+                <<" p_dot:[" << n.x_dot.getX() << "," << n.x_dot.getY() << "]=>" << n.x_dot.getL() << "\n";
+        return output;
+    }
+};
+
+
+// ======================================================================== //
+// ======================================================================== //
+// ======================================================================== //
+
 void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
                  std::vector<Actor> &actors);
 void actorListInit(std::vector<Actor> &actors);
-void actorComputeForces(std::vector<Actor> &actors);
 void printActorMap(std::vector<Actor> &actors);
 void printActorVec(std::vector<Actor> &actors);
 
-std::vector<Actor> testFunction();
+// ======================================================================== //
+
+void euler_method(Node &node);
+void euler_method(std::vector<Node> &nodes);
+void testEuler(); 
 

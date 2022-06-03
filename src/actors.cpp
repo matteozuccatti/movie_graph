@@ -143,6 +143,7 @@ void actorComputeForces(std::vector<Actor> &actors){
 
     while((new_epsilon >= espilon_min) && (iteration < max_iteration)){
         it = actors.begin();
+        new_epsilon = espilon_min; 
 
         //std::cout << " * COMPUTING FORCES\n";
         while(it!=actors.end()){
@@ -156,14 +157,17 @@ void actorComputeForces(std::vector<Actor> &actors){
         it = actors.begin();
         while(it!=actors.end()){
             it->displacePos(iteration);
-            it->printActor();
-            std::cout << "cooling : " << cooling_factor(iteration);
             it++;
         }
-
         iteration++;
     }
-    std::cout << "MINIMUM iteration : " << iteration << " MINIMUM epsilon : " << new_epsilon << std::endl; 
+
+    it=actors.begin();
+    while(it!=actors.end()){
+        it->printActor();
+        it++;
+    }
+
 }
 
 std::vector<Actor> testFunction(){
@@ -171,32 +175,38 @@ std::vector<Actor> testFunction(){
     // Constructor 
     Actor a0 = {"00", "Actor MAIN"};
     Actor a1 = {"01", "Actor 1"};
-    Actor a3 = {"02", "Actor 2"};
-    Actor a2 = {"03", "Actor 3"};
+    Actor a2 = {"02", "Actor 2"};
+    Actor a3 = {"03", "Actor 3"};
+    Actor a4 = {"04", "Actor 4"};
     // Common movies 
     a1.commonMovies_number = 1; 
     a1.commonMovies_number = 2;
     a3.commonMovies_number = 2;
+    a4.commonMovies_number = 2;
     // Actor size 
     a0.actorSize = 35; a0.mainActor = true;
     a1.actorSize = 15; a1.springStiffness=idealSpringL;  
     a2.actorSize = 15; a2.springStiffness=idealSpringL;  
     a3.actorSize = 15; a3.springStiffness=idealSpringL;  
+    a4.actorSize = 15; a4.springStiffness=idealSpringL;  
     // Connected to 
     a1.connectedTo.push_back("Actor MAIN");
     a2.connectedTo.push_back("Actor MAIN");
     a3.connectedTo.push_back("Actor MAIN");
+    a4.connectedTo.push_back("Actor MAIN");
     // Initial pos
     a0.pos = Vector(0,0); 
-    a1.pos = Vector(50,50); 
-    a2.pos = Vector(-50,50); 
-    a3.pos = Vector(50,-50);
+    a1.pos = Vector(50,20); 
+    a2.pos = Vector(-50,20); 
+    a3.pos = Vector(50,-20);
+    a4.pos = Vector(-50,-20);
 
     // Push actors into vector
     actors.push_back(a0); 
     actors.push_back(a1); 
     actors.push_back(a2); 
     actors.push_back(a3); 
+    //actors.push_back(a4); 
 
     return actors;
 }
@@ -211,15 +221,6 @@ void printActorVec(std::vector<Actor> &actors){
     std::cout << std::endl;
 }
 
-double cooling_factor(double long t){
-    double tmp_ret = 1.0/t; 
-    if (abs(tmp_ret) < 0.001){
-        return 0.001;
-    }else{
-        return tmp_ret;
-    }
-    
-}
 
 // ======================================================================== //
 //                              VECTOR CLASS                                //
@@ -238,7 +239,6 @@ void Vector::inverse(){
 }
 
 
-
 // ======================================================================== //
 //                              ACTOR CLASS                                 //
 // ======================================================================== //
@@ -249,12 +249,14 @@ void Actor::computeRepulsiveForce(std::vector<Actor> &actors){
 
     std::vector<Actor>::iterator it = actors.begin(); 
     while(it!=actors.end()){
-        if(it->actorId != this->actorId && !it->mainActor){
-            Vector pv_pu = it->pos - this->pos;
-            pv_pu.updateL(); 
-            double mod = pv_pu.getL()+0.1;
-            pv_pu.normalize();
-            this->f_repulsive += pv_pu * (10.0 / pow(mod,3)); 
+        if(it->actorId != this->actorId && !it->mainActor){          //&& !it->mainActor
+            Vector pu_pv = this->pos - it->pos; 
+            pu_pv.updateL();
+            double delta = pu_pv.getL();
+            if(delta < 0)
+                pu_pv.inverse();
+            pu_pv.normalize();
+            this->f_repulsive += pu_pv * (0.01/abs(delta)); 
         }
         it++;
     }
@@ -268,14 +270,13 @@ void Actor::computeAttractiveForce(std::vector<Actor> &actors){
     while(it!=actors.end()){
 
         if (it->mainActor){
-            Vector pu_pv = (this->pos - it->pos); 
-            pu_pv.inverse();
+            Vector pu_pv = this->pos - it->pos; 
             pu_pv.updateL();
-            double mod = pu_pv.getL()+0.1;
+            this->updatePosDot(); 
+            double delta = pu_pv.getL()-idealSpringL;
             pu_pv.normalize();
-            this->f_attractive += pu_pv * (1.0 *mod); 
+            this->f_attractive += pu_pv * (delta) - pu_pv * (this->pos_dot); 
         }
-
         it++;
     }
 }
@@ -289,23 +290,19 @@ void Actor::computeDisplacementForce(){
 void Actor::displacePos(long double iter){
     if (this->mainActor)
         return;
-    Vector displacement_pos = this->f_displacement * cooling_factor(iter);
-    displacement_pos.updateL();
-    double displacement     = displacement_pos.getL();
+    Vector displacement_pos = this->f_displacement ;
 
-    if (displacement > new_epsilon){
-        new_epsilon = displacement;
-        //std::cout << "*********** NEW MINIMUM ************* \n"; 
-        //std::cout << "new_epsilon : " << new_epsilon << " min_epsilon : " << espilon_min << "\n";
-    }
-
-    //std::cout << "minimum displacement : " << new_epsilon << std::endl;
     this->pos += displacement_pos;
 }
 
 void Actor::resetForces(){
     this->f_attractive = Vector(0.0,0.0); 
-    this->f_repulsive = Vector(0.0,0.0);
+    this->f_repulsive  = Vector(0.0,0.0);
+}
+
+void Actor::updatePos(Vector &new_pos){
+    this->pos_dot = new_pos - this->pos; 
+    this->pos     = new_pos;
 }
 
 void Actor::printActor(){

@@ -17,7 +17,6 @@ int main(int argc, char** argv){
     std::vector<Actor>  act = testFunction();
     printActorVec(act);
     actorComputeForces(act);
-    printActorVec(act);
 
     runWindow(act);
 

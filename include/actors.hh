@@ -7,11 +7,11 @@
 
 #include "SQL_parser.hh"
 
-static double idealSpringL = 1; 
-static double espilon_min = 0.01; 
+static double idealSpringL = 150; 
+static double espilon_min = 2; 
 static double new_epsilon = espilon_min;
 static std::string main_actor = "Leonardo DiCaprio";
-static long double max_iteration = 1000;
+static long double max_iteration = 25000;
 
 class Vector{
 private:
@@ -105,7 +105,7 @@ public:
     int allMovies = 0; 
     int actorSize = 0; 
     double springStiffness = 1;
-    Vector pos,f_repulsive,f_attractive,f_displacement = Vector(0.0,0.0); 
+    Vector pos, pos_dot, f_repulsive,f_attractive,f_displacement = Vector(0.0,0.0); 
     std::vector<std::string> connectedTo; 
     bool mainActor = false; 
 
@@ -116,6 +116,8 @@ public:
     void computeDisplacementForce();
     void displacePos(long double iter);
     void resetForces(); 
+
+    void updatePos(); 
     void printActor();
 
     // -----------------------------------------------
@@ -139,6 +141,5 @@ void actorComputeForces(std::vector<Actor> &actors);
 void printActorMap(std::vector<Actor> &actors);
 void printActorVec(std::vector<Actor> &actors);
 
-double cooling_factor(long double t);
 std::vector<Actor> testFunction();
 

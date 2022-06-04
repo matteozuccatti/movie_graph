@@ -35,15 +35,15 @@ public:
 
     double getX() const  {return x;}
     double getY() const  {return y;}
-    double getL() const  {return L;}
+    double getL() const  {return sqrt(pow(this->x,2) + pow(this->y,2));}
 
     void setX(double x_)    {this->x=x_; updateL();}
     void setY(double y_)    {this->y=y_; updateL();}
 
     void updateL()  {this->L = sqrt(pow(this->x,2) + pow(this->y,2));}
-    void normalize();
-    void invert();
-    Vector times(double m);
+    Vector normalize();
+    Vector invert();
+    Vector times (double m) const;
 
     // ------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ public:
         this->setY(y - v.getY());
     }
     friend std::ostream &operator<<(std::ostream &output, const Vector &v ) {
-        output << "Vec pos : [" << v.getX() << "," << v.getY()  << "] =>  L :" << v.getL() << "\n";
+        output <<  "[" << v.getX() << "," << v.getY()  << "]=>L:" << v.getL();
         return output;
     }
     friend Vector operator+(Vector const&v1, Vector const& v2){
@@ -143,14 +143,14 @@ public:
     // State variables
     Vector x_ddot = Vector(0.0,0.0); 
     Vector x_dot  = Vector(0.0,0.0); 
-    Vector x      = Vector(1,0.0); 
+    Vector x      = Vector(50,0.0); 
 
     Vector f_ext  = Vector(0.0,0.0);
     Vector f_tot  = Vector(0.0,0.0);
 
     // Physical properties  
     double k  = 5;   // spring coefficient
-    double x0 = 5;   // spring lenght neutral 
+    double x0 = 200;   // spring lenght neutral 
     double c  = 5;   // damper coefficient 
 
     // Functions 
@@ -162,7 +162,7 @@ public:
 
     friend std::ostream &operator<<(std::ostream &output, const Node &n ) {
         output << "NODE PRINT p:[" << n.x.getX() << "," << n.x.getY()  << "]=>" << n.x.getL() 
-                <<" p_dot:[" << n.x_dot.getX() << "," << n.x_dot.getY() << "]=>" << n.x_dot.getL() << "\n";
+                <<" p_dot:[" << n.x_dot.getX() << "," << n.x_dot.getY() << "]=>" << n.x_dot.getL();
         return output;
     }
 };
@@ -180,7 +180,8 @@ void printActorVec(std::vector<Actor> &actors);
 
 // ======================================================================== //
 
-void euler_method(Node &node);
+void euler_method(Node &node, int iter);
 void euler_method(std::vector<Node> &nodes);
+bool stop_euler(std::vector<Node> &nodes);
 void testEuler(); 
 

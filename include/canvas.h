@@ -5,6 +5,7 @@
 #include <gtkmm/application.h>
 #include <gtkmm/window.h>
 #include "actors.hh"
+#include <ctime>
 
 class CCanvas : public Gtk::DrawingArea
 {

@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Jun  3 15:15:49 2022
+# Make data base, printed on Sat Jun  4 22:11:47 2022
 
 # Variables
 
@@ -47,7 +47,7 @@ VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupp
 # environment
 _ = /usr/share/code/code
 # environment
-JOURNAL_STREAM = 8:38431
+JOURNAL_STREAM = 8:35512
 # environment
 XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
 # makefile
@@ -67,7 +67,7 @@ DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-MANAGERPID = 1309
+MANAGERPID = 1293
 # environment
 LESSOPEN = | /usr/bin/lesspipe %s
 # environment
@@ -83,7 +83,7 @@ GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-SESSION_MANAGER = local/matteo:@/tmp/.ICE-unix/1526,unix/matteo:/tmp/.ICE-unix/1526
+SESSION_MANAGER = local/matteo:@/tmp/.ICE-unix/1509,unix/matteo:/tmp/.ICE-unix/1509
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -93,7 +93,7 @@ VSCODE_LOG_STACK = false
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-INVOCATION_ID = 7b7414ebd3364fe4ad787da7470abcf1
+INVOCATION_ID = 7a8ed3f2abb74270ba7634f413831689
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -103,7 +103,7 @@ XDG_SESSION_DESKTOP = ubuntu
 # environment
 SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 4265
+GIO_LAUNCHED_DESKTOP_FILE_PID = 4469
 # automatic
 %F = $(notdir $%)
 # environment
@@ -115,7 +115,7 @@ PWD = /home/matteo/code/movie_graph
 # default
 .LOADED := 
 # environment
-SSH_AGENT_PID = 1487
+SSH_AGENT_PID = 1471
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # environment
@@ -153,7 +153,7 @@ SHLVL = 0
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-1ac9413a-5819-4e27-9842-25ebf43aa49f.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-263506e6-31ee-48c0-baca-2133d6077e2f.sock
 # default
 MAKE_VERSION := 4.2.1
 # environment
@@ -221,7 +221,7 @@ LC_ADDRESS = it_IT.UTF-8
 # environment
 LANG = C
 # environment
-VSCODE_PID = 4265
+VSCODE_PID = 4469
 # variable set hash-table stats:
 # Load=106/1024=10%, Rehash=0, Collisions=18/128=14%
 
@@ -281,6 +281,9 @@ GNUmakefile:
 
 # No 'vpath' search paths.
 
+ 
+make: *** No rule to make target 'all'.  Stop.
+
 # No general ('VPATH' variable) search path.
 
 # strcache buffers: 1 (0) / strings = 18 / storage = 174 B / avg = 9 B
@@ -288,10 +291,7 @@ GNUmakefile:
 
 # strcache performance: lookups = 21 / hit rate = 14%
 # hash-table stats:
- 
-make: *** No rule to make target 'all'.  Stop.
-
 # Load=18/8192=0%, Rehash=0, Collisions=1/21=5%
-# Finished Make data base on Fri Jun  3 15:15:49 2022
+# Finished Make data base on Sat Jun  4 22:11:47 2022
 
  

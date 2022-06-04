@@ -142,19 +142,18 @@ void printActorMap(std::vector<Actor> &actors){
 //                              VECTOR CLASS                                //
 // ======================================================================== //
 
-void Vector::normalize(){
+Vector Vector::normalize(){
     this->updateL();
-    this->x = this->getX() / this->getL();
-    this->y = this->getY() / this->getL();
-    this->updateL();
+    return Vector( this->getX() / this->getL(),
+                   this->getY() / this->getL() );
 }
 
-void Vector::invert(){
-    this->setX(-this->getX());
-    this->setY(-this->getY());
+Vector Vector::invert(){
+    return Vector( (-this->getX()),
+                   (-this->getY()));
 }
 
-Vector Vector::times(double m){
+Vector Vector::times (double m) const{
     return Vector(this->getX()*m, this->getY()*m);
 }
 
@@ -177,53 +176,67 @@ void Node::evaluateF_ext(){
 
 void Node::evaluateF(){
     evaluateF_ext();
-    f_tot =  x.times(k * (x0-(x.getL()))) + x_dot.times(-c) + f_ext;
-    //f_tot = f_tot.times(1/100);
+    f_tot =  (x.normalize()).times(k * (x0-(x.getL()))) - x_dot.times(c) + f_ext;
+    //std::cout << " f_spring: " <<  x.normalize().times(k * (x0-(x.getL()))) << " f_damper: " << x_dot.times(c).invert() << "\n";
 }
 
-void euler_method(Node &node){
+void euler_method(Node &node,int iter){
 
     if(!node.euler_complete){
         double dT = 0.1; 
-        node.evaluateF(); 
-
-        Vector new_x     = node.x     + node.x_dot.times(dT); 
-        Vector new_x_dot = node.x_dot + node.f_tot.times(dT);
-
-        node.x     = new_x; 
-        node.x_dot = new_x_dot;
-
         
+        node.x     = node.x     + node.x_dot.times(dT); 
+        node.x_dot = node.x_dot + node.f_tot.times(dT);
+
+        if(iter>25 && false){
+            std::cout << "STOP ITER \n";
+            node.euler_complete = true;
+        }
         if(isnan(node.x.getX())){
             std::cout << "WARNING : nan \n";
             node.euler_complete = true;
         }
-        
-        if(node.x_dot.getL() < 0.00001){
+        if(node.x_dot.getL() < 0.00001 && iter>1){
             std::cout << "STOP SLOW \n";
             node.euler_complete = true;
         }
-        
-        /*
-        if(node.x.getL() < 1.5)
-            node.euler_complete = true;
-        */
+
+        node.evaluateF();
     }
 }
 
 void euler_method(std::vector<Node> &nodes){
+    int k = 0; 
     std::vector<Node>::iterator it = nodes.begin();
+    while(!stop_euler(nodes)){
+        while(it!=nodes.end()){
+            euler_method(*it,k); 
+            it++;
+            k++;
+        }
+        it = nodes.begin();
+    }
+    std::cout << "\nFULL STOP\n";
+}
 
+bool stop_euler(std::vector<Node> &nodes){
+    bool stop_euler = false; 
+    std::vector<Node>::iterator it = nodes.begin();
     while(it!=nodes.end()){
-        euler_method(*it); 
+        stop_euler =  stop_euler || it->euler_complete; 
         it++;
     }
+    return stop_euler;
 }
 
 void testEuler(){
     Node node_test; 
+    int k = 0;
     while(!node_test.euler_complete){
-        euler_method(node_test);
-        std::cout << node_test;
+        std::cout << "it:" << k << " ";
+        euler_method(node_test,k);
+        std::cout << node_test << "\n";
+        k++;
+
     }
 }

@@ -16,12 +16,18 @@ int main(int argc, char** argv){
 
 
 
-    Node n1,n2; 
-    std::vector<Node> act = {n1,n2};
-    //runWindow(act); 
+    Node n1,n2,n3,n4; 
+    n1.x0 = 350;    n1.x = Vector(100,100);
+    n2.x0 = 350;    n2.x = Vector(-100,0);
+    n3.x0 = 450;    n3.x = Vector(100,200); 
+    n4.x0 = 100;    n4.x = Vector(100,0);
 
 
-    testEuler();
+    std::vector<Node> act = {n1,n2,n3,n4};
+    runWindow(act); 
+
+
+    //testEuler();
 
     return 0; 
 }

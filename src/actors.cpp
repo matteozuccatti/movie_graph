@@ -196,8 +196,8 @@ void euler_method(Node &node,int iter){
             std::cout << "WARNING : nan \n";
             node.euler_complete = true;
         }
-        if(node.x_dot.getL() < 0.00001 && iter>1){
-            std::cout << "STOP SLOW \n";
+        if(node.x_dot.getL() < 0.00001 && iter>1 && abs(node.x.getL()-node.x0) < 5){
+            std::cout << "STOP SLOW : " << node.x << " ~ " << node.x0 << "\n";
             node.euler_complete = true;
         }
 
@@ -219,11 +219,14 @@ void euler_method(std::vector<Node> &nodes){
     std::cout << "\nFULL STOP\n";
 }
 
+/*
+    Stop when all of the nodes have euler_complete = true; 
+*/
 bool stop_euler(std::vector<Node> &nodes){
-    bool stop_euler = false; 
+    bool stop_euler = true; 
     std::vector<Node>::iterator it = nodes.begin();
     while(it!=nodes.end()){
-        stop_euler =  stop_euler || it->euler_complete; 
+        stop_euler =  stop_euler && it->euler_complete; 
         it++;
     }
     return stop_euler;

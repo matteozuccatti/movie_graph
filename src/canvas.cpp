@@ -15,8 +15,8 @@ bool CCanvas::on_draw(Cairo::RefPtr<Cairo::Context> const & cr)
         // circle orange
         cr->set_source_rgb(1.,.5,.0);
         cr->arc(origin.getX()+it->x.getX(),
-                origin.getY()+it->x.getY(),
-                25, 0, 2*M_PI);
+                origin.getY()-it->x.getY(),
+                15, 0, 2*M_PI);
         cr->fill();
 
         // line 
@@ -24,13 +24,13 @@ bool CCanvas::on_draw(Cairo::RefPtr<Cairo::Context> const & cr)
         cr->set_line_width(3);
         cr->move_to(origin.getX(), origin.getY());
         cr->line_to(origin.getX()+it->x.getX(),
-                    origin.getY()+it->x.getY());
+                    origin.getY()-it->x.getY());
         cr->stroke();
         
     }
     
     cr->set_source_rgb(.7,.7,.7);
-    cr->arc(origin.getX(), origin.getY(),35, 0, 2*M_PI);
+    cr->arc(origin.getX(), origin.getY(),25, 0, 2*M_PI);
     cr->fill();
 
     
@@ -45,7 +45,7 @@ int runWindow(std::vector<Node>  &actors)
 
     Gtk::Window window;
     window.set_default_size(1920,1080);
-    window.set_title("Cairo tutorial C++");
+    window.set_title("Actors graph plot");
 
     CCanvas area;
     area.actors = actors;

@@ -149,14 +149,14 @@ public:
     Vector f_tot  = Vector(0.0,0.0);
 
     // Physical properties  
-    double k  = 5;   // spring coefficient
+    double k  = 10;   // spring coefficient
     double x0 = 200;   // spring lenght neutral 
-    double c  = 5;   // damper coefficient 
+    double c  = 15;   // damper coefficient 
 
     // Functions 
     bool euler_complete = false; 
-    void evaluateF_ext();
-    void evaluateF();
+    void evaluateF_ext(std::vector<Node> &nodes);
+    void evaluateF(std::vector<Node> &nodes);
 
     // ----------------------------------------------------------------------
 
@@ -180,8 +180,9 @@ void printActorVec(std::vector<Actor> &actors);
 
 // ======================================================================== //
 
-void euler_method(Node &node, int iter);
-void euler_method(std::vector<Node> &nodes);
+void euler_method(std::vector<Node> &nodes, Node &node);
+void compute_forces(std::vector<Node> &nodes, Node &node);
+void compute_graph_layout(std::vector<Node> &nodes);
 bool stop_euler(std::vector<Node> &nodes);
 void testEuler(); 
 

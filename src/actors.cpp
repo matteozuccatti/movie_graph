@@ -170,49 +170,72 @@ Vector Vector::times (double m) const{
 //                               NODE CLASS                                 //
 // ======================================================================== //
 
-void Node::evaluateF_ext(){
+void Node::evaluateF_ext(std::vector<Node> &nodes){
+    std::vector<Node>::iterator it = nodes.begin(); 
+    this->f_ext = Vector(0,0);
 
+    while(it!=nodes.end()){
+        Vector dist_vec = it->x - this->x; 
+        double dist_mod = dist_vec.getL();
+
+        if(dist_mod>0){
+            this->f_ext += dist_vec.normalize().times(1e3/pow(dist_mod,2));
+        }
+
+        it++;
+    }
+    //std::cout << "f_repulsive :" << this->f_ext;
 }
 
-void Node::evaluateF(){
-    evaluateF_ext();
+void Node::evaluateF(std::vector<Node> &nodes){
     f_tot =  (x.normalize()).times(k * (x0-(x.getL()))) - x_dot.times(c) + f_ext;
     //std::cout << " f_spring: " <<  x.normalize().times(k * (x0-(x.getL()))) << " f_damper: " << x_dot.times(c).invert() << "\n";
+    
 }
 
-void euler_method(Node &node,int iter){
+void euler_method(std::vector<Node> &nodes, Node &node){
 
-    if(!node.euler_complete){
-        double dT = 0.1; 
-        
-        node.x     = node.x     + node.x_dot.times(dT); 
-        node.x_dot = node.x_dot + node.f_tot.times(dT);
+    double dT = 0.1; 
+    node.x     = node.x     + node.x_dot.times(dT); 
+    node.x_dot = node.x_dot + node.f_tot.times(dT);
 
-        if(iter>25 && false){
-            std::cout << "STOP ITER \n";
-            node.euler_complete = true;
-        }
-        if(isnan(node.x.getX())){
-            std::cout << "WARNING : nan \n";
-            node.euler_complete = true;
-        }
-        if(node.x_dot.getL() < 0.00001 && iter>1 && abs(node.x.getL()-node.x0) < 5){
-            std::cout << "STOP SLOW : " << node.x << " ~ " << node.x0 << "\n";
-            node.euler_complete = true;
-        }
-
-        node.evaluateF();
-    }
 }
 
-void euler_method(std::vector<Node> &nodes){
-    int k = 0; 
+void compute_forces(std::vector<Node> &nodes, Node &node){
+    node.evaluateF_ext(nodes);
+    node.evaluateF(nodes);
+}
+
+void compute_graph_layout(std::vector<Node> &nodes){
+
     std::vector<Node>::iterator it = nodes.begin();
+
+    // FIRST RUN
+    while(it!=nodes.end()){
+        compute_forces(nodes,*it);
+        it++; 
+    }
+    it = nodes.begin();
+
+    while(it!=nodes.end()){
+        euler_method(nodes,*it); 
+        it++;
+    }
+    it = nodes.begin();
+
+
+    // GO UNTIL EVERY NODE IS SLOW ENOUGH
     while(!stop_euler(nodes)){
+
         while(it!=nodes.end()){
-            euler_method(*it,k); 
+           compute_forces(nodes,*it);
+           it++; 
+        }
+        it = nodes.begin();
+
+        while(it!=nodes.end()){
+            euler_method(nodes,*it); 
             it++;
-            k++;
         }
         it = nodes.begin();
     }
@@ -220,24 +243,40 @@ void euler_method(std::vector<Node> &nodes){
 }
 
 /*
-    Stop when all of the nodes have euler_complete = true; 
+    Stop when all of the nodes have small enough velocity; 
 */
-bool stop_euler(std::vector<Node> &nodes){
-    bool stop_euler = true; 
+bool stop_euler(std::vector<Node> &nodes){ 
+    /*
     std::vector<Node>::iterator it = nodes.begin();
     while(it!=nodes.end()){
-        stop_euler =  stop_euler && it->euler_complete; 
+        if(it->x_dot.getL() > 0.0001)
+            return false; 
         it++;
     }
-    return stop_euler;
+    return true;
+    */
+
+    Vector f_glob = Vector(0,0);
+    std::vector<Node>::iterator it = nodes.begin();
+    while(it!=nodes.end()){
+        f_glob += it->f_tot; 
+        it++;
+    }
+
+    std::cout << "F_GLOB: " << f_glob << "\n"; 
+    if(f_glob.getL() < 1.5e-9)
+        return true;
+    return false;
+
 }
 
 void testEuler(){
     Node node_test; 
+    std::vector<Node> nodes = {node_test};
     int k = 0;
     while(!node_test.euler_complete){
         std::cout << "it:" << k << " ";
-        euler_method(node_test,k);
+        euler_method(nodes,node_test);
         std::cout << node_test << "\n";
         k++;
 

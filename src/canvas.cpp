@@ -33,6 +33,13 @@ bool CCanvas::on_draw(Cairo::RefPtr<Cairo::Context> const & cr)
     cr->arc(origin.getX(), origin.getY(),25, 0, 2*M_PI);
     cr->fill();
 
+    //Orbit 
+    cr->set_source_rgb(1.,.5,.0);
+    cr->arc(origin.getX(), origin.getY(),350, 0, 2*M_PI);
+    cr->stroke();
+
+
+
     
     return true;
 }
@@ -49,7 +56,7 @@ int runWindow(std::vector<Node>  &actors)
 
     CCanvas area;
     area.actors = actors;
-    euler_method(area.actors);
+    compute_graph_layout(area.actors);
 
     window.add(area);
     area.show();

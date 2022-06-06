@@ -149,7 +149,7 @@ public:
     Vector f_tot  = Vector(0.0,0.0);
 
     // Physical properties  
-    double k  = 10;   // spring coefficient
+    double k  = 100;   // spring coefficient
     double x0 = 200;   // spring lenght neutral 
     double c  = 15;   // damper coefficient 
 

@@ -179,7 +179,7 @@ void Node::evaluateF_ext(std::vector<Node> &nodes){
         double dist_mod = dist_vec.getL();
 
         if(dist_mod>0){
-            this->f_ext += dist_vec.normalize().times(1e3/pow(dist_mod,2));
+            this->f_ext += dist_vec.normalize().times(1e2/pow(dist_mod,2));
         }
 
         it++;
@@ -246,27 +246,28 @@ void compute_graph_layout(std::vector<Node> &nodes){
     Stop when all of the nodes have small enough velocity; 
 */
 bool stop_euler(std::vector<Node> &nodes){ 
-    /*
+    
     std::vector<Node>::iterator it = nodes.begin();
     while(it!=nodes.end()){
-        if(it->x_dot.getL() > 0.0001)
+        if(it->x_dot.getL() > 0.0005)
             return false; 
         it++;
     }
     return true;
-    */
+    
 
+    /*
     Vector f_glob = Vector(0,0);
     std::vector<Node>::iterator it = nodes.begin();
     while(it!=nodes.end()){
         f_glob += it->f_tot; 
         it++;
     }
-
     std::cout << "F_GLOB: " << f_glob << "\n"; 
     if(f_glob.getL() < 1.5e-9)
         return true;
     return false;
+    */
 
 }
 

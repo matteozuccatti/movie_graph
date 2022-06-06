@@ -24,7 +24,7 @@ int main(int argc, char** argv){
 
 
     //std::vector<Node> act = {n1,n2,n3,n4};
-    std::vector<Node> act = {n1,n4};
+    std::vector<Node> act = {n1,n2,n3,n4};
     runWindow(act); 
 
 

@@ -23,7 +23,8 @@ int main(int argc, char** argv){
     n4.x0 = 350;    n4.x = Vector(100,-20);
 
 
-    std::vector<Node> act = {n1,n2,n3,n4};
+    //std::vector<Node> act = {n1,n2,n3,n4};
+    std::vector<Node> act = {n1,n4};
     runWindow(act); 
 
 

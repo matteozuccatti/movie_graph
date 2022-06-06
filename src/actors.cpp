@@ -179,7 +179,7 @@ void Node::evaluateF_ext(std::vector<Node> &nodes){
         double dist_mod = dist_vec.getL();
 
         if(dist_mod>0){
-            this->f_ext += dist_vec.normalize().times(1e2/pow(dist_mod,2));
+            this->f_ext += dist_vec.normalize().times(1e3/dist_mod);
         }
 
         it++;
@@ -195,7 +195,7 @@ void Node::evaluateF(std::vector<Node> &nodes){
 
 void euler_method(std::vector<Node> &nodes, Node &node){
 
-    double dT = 0.1; 
+    double dT = 0.005; 
     node.x     = node.x     + node.x_dot.times(dT); 
     node.x_dot = node.x_dot + node.f_tot.times(dT);
 

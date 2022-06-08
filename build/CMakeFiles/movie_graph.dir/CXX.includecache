@@ -25,6 +25,8 @@ map
 ../include/actors.hh
 string
 -
+stdlib.h
+-
 vector
 -
 iostream

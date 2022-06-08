@@ -7,16 +7,12 @@
 #include <typeinfo>
 #include "SQL_parser.hh"
 
-
-static std::string main_actor = "Leonardo DiCaprio"; 
 // ======================================================================== //
 //                              VECTOR CLASS                                //
 // ======================================================================== //
 class Vector{
 private:
-    double x; 
-    double y;
-    double L;
+    double x,y; 
 
 public:
     Vector()
@@ -37,10 +33,9 @@ public:
     double getY() const  {return y;}
     double getL() const  {return sqrt(pow(this->x,2) + pow(this->y,2));}
 
-    void setX(double x_)    {this->x=x_; updateL();}
-    void setY(double y_)    {this->y=y_; updateL();}
+    void setX(double x_)    {this->x=x_;}
+    void setY(double y_)    {this->y=y_;}
 
-    void updateL()  {this->L = sqrt(pow(this->x,2) + pow(this->y,2));}
     Vector normalize();
     Vector invert();
     Vector times (double m) const;
@@ -93,96 +88,66 @@ public:
 
 
 // ======================================================================== //
-//                              ACTOR CLASS                                 //
-// ======================================================================== //
-
-class Actor{
-public:
-    Actor(std::string actorId_ , std::string actorName_ )
-    {
-        this->actorId   = actorId_; 
-        this->actorName = actorName_;
-    }
-
-    // -----------------------------------------------
-
-    std::string actorId = "";
-    std::string actorName = ""; 
-    std::vector<std::string> commonMovies = {}; 
-    int commonMovies_number = 0; 
-    int allMovies = 0; 
-    int actorSize = 0; 
-
-    std::vector<std::string> connectedTo = {};
-
-    // -----------------------------------------------
-
-    void printActor();
-
-    // -----------------------------------------------
-
-    bool operator==(const Actor &a) const {
-        return(this->actorId == a.actorId);
-    }
-    bool operator!=(const Actor &a) const {
-        return(this->actorId != a.actorId);
-    }
-    bool operator<(const Actor &a) const {
-        return(this->allMovies > a.allMovies);
-    }
-
-};
-
-
-// ======================================================================== //
 //                               NODE CLASS                                 //
 // ======================================================================== //
-
 class Node{
 public: 
+    static int total_nodes; 
+    const int node_id; 
+    Node():
+        node_id( (total_nodes++) )
+    {
+        
+    }
     // State variables
     Vector x_ddot = Vector(0.0,0.0); 
     Vector x_dot  = Vector(0.0,0.0); 
     Vector x      = Vector(50,0.0); 
 
-    Vector f_ext  = Vector(0.0,0.0);
-    Vector f_tot  = Vector(0.0,0.0);
+    // Vector forces
+    Vector f_spr, f_damp, f_ext, f_fri, f_tot  = Vector(0.0,0.0);
+    
 
-    // Physical properties  
-    double k  = 100;   // spring coefficient
-    double x0 = 200;   // spring lenght neutral 
-    double c  = 15;   // damper coefficient 
-
-    // Functions 
-    bool euler_complete = false; 
-    void evaluateF_ext(std::vector<Node> &nodes);
-    void evaluateF(std::vector<Node> &nodes);
+    // Physical properties == LINK  
+    double k  = 1000;                    // spring coefficient
+    double x0 = 200;                    // spring lenght neutral 
+    double c  = 25;                     // damper coefficient 
+    // Graphical properties == NODE 
+    double size = 10; 
 
     // ----------------------------------------------------------------------
 
     friend std::ostream &operator<<(std::ostream &output, const Node &n ) {
-        output << "NODE PRINT p:[" << n.x.getX() << "," << n.x.getY()  << "]=>" << n.x.getL() 
-                <<" p_dot:[" << n.x_dot.getX() << "," << n.x_dot.getY() << "]=>" << n.x_dot.getL();
+        output << 
+        "NODE id:"  << std::setw(2) <<  n.node_id       <<
+        " p:["      << std::setw(6) <<  n.x.getX()      << 
+        ","         << std::setw(6) <<  n.x.getY()      << 
+        "]=>"       << std::setw(10)<<  n.x.getL()      <<
+        " | p_dot:["<< std::setw(6) <<  n.x_dot.getX()  << 
+        ","         << std::setw(6) <<  n.x_dot.getY()  << 
+        "]=>"       << std::setw(10)<<  n.x_dot.getL()  ;
         return output;
+    }
+
+    bool operator==(const Node&n) const{
+        return this->node_id == n.node_id;
     }
 };
 
 
-// ======================================================================== //
-// ======================================================================== //
-// ======================================================================== //
+std::vector<Node> get_sample_vector_nodes();
 
-void actorParser(std::vector<std::pair<std::string, std::string>> &movieVec,
-                 std::vector<Actor> &actors);
-void actorListInit(std::vector<Actor> &actors);
-void printActorMap(std::vector<Actor> &actors);
-void printActorVec(std::vector<Actor> &actors);
+void computeSpringForces(std::vector<Node> &nodes);
+void computeDamperForces(std::vector<Node> &nodes);
+void computeExternalForces(std::vector<Node> &nodes);
+void computeFrictionForces(std::vector<Node> &nodes);
+void computeTotForces(std::vector<Node> &nodes);
+
+void updateLayout(std::vector<Node> &nodes);
+void updateForces(std::vector<Node> &nodes);
+void updatePos(std::vector<Node> &nodes);
+
+void printVectorNodes(std::vector<Node> &nodes);
 
 // ======================================================================== //
-
-void euler_method(std::vector<Node> &nodes, Node &node);
-void compute_forces(std::vector<Node> &nodes, Node &node);
-void compute_graph_layout(std::vector<Node> &nodes);
-bool stop_euler(std::vector<Node> &nodes);
-void testEuler(); 
 

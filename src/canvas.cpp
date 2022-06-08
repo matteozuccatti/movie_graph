@@ -1,22 +1,80 @@
 #include "../include/canvas.h"
 
 
+
+bool CCanvas::on_button_press_event(GdkEventButton *event){
+    m_tMouseColor = { .0,.0,.9 };
+    if (event->type == GDK_BUTTON_PRESS ){
+        m_tEventPress = *event;
+        m_tShiftStart = m_tShift;
+    }
+
+    queue_draw();
+    return true;
+}
+    
+bool CCanvas::on_motion_notify_event(GdkEventMotion *event){
+    m_tMousePos = (*event - m_tShift)/m_dScale;
+
+    if ( event->type & GDK_MOTION_NOTIFY  && event->state & GDK_BUTTON3_MASK )
+        m_tShift = m_tShiftStart - (m_tEventPress - *event);
+    
+    queue_draw();
+    return true;
+}
+    
+bool CCanvas::on_button_release_event(GdkEventButton* event){
+    queue_draw();
+    return true;
+}
+    
+bool CCanvas::on_scroll_event(GdkEventScroll *event){
+    if ( event->delta_y>0 )
+        m_tMouseColor = { .9,.0,.0 };
+    else
+        m_tMouseColor = { .0,.9,.0 };
+
+    SPoint const p0{ (*event - m_tShift)/m_dScale };
+    m_dScale *= (event->delta_y>0)?.9:1.1; if (m_dScale<.01) m_dScale=.01;
+    SPoint const p1{ (*event - m_tShift)/m_dScale };
+    m_tShift -= (p0-p1)*m_dScale;
+
+    queue_draw();
+    return true;
+}
+
+bool CCanvas::updateGraph(int tick){
+
+    updateLayout(nodes);
+
+
+    queue_draw();
+    return true;
+}
+
 bool CCanvas::on_draw(Cairo::RefPtr<Cairo::Context> const & cr)
 {
+    
+    // ---------------------------------------------------------
+    
+    Cairo::Matrix matrix(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
+    matrix.scale(m_dScale,m_dScale);
+    matrix.translate(m_tShift.x/m_dScale, m_tShift.y/m_dScale);
+    cr->transform(matrix);
+
     Gtk::Allocation allocation{ get_allocation() };
     auto const width { (double)allocation.get_width() };
     auto const height{ (double)allocation.get_height() };
-  
     Vector origin = Vector(width/2, height/2);
     
 
-    for(std::vector<Node>::iterator it=actors.begin(); it!=actors.end(); it++){
+    for(std::vector<Node>::iterator it=nodes.begin(); it!=nodes.end(); it++){
         // Normal nodes 
         // circle orange
         cr->set_source_rgb(1.,.5,.0);
         cr->arc(origin.getX()+it->x.getX(),
                 origin.getY()-it->x.getY(),
-                15, 0, 2*M_PI);
+                it->size, 0, 2*M_PI);
         cr->fill();
 
         // line 
@@ -32,19 +90,14 @@ bool CCanvas::on_draw(Cairo::RefPtr<Cairo::Context> const & cr)
     cr->set_source_rgb(.7,.7,.7);
     cr->arc(origin.getX(), origin.getY(),25, 0, 2*M_PI);
     cr->fill();
-
-    //Orbit 
-    cr->set_source_rgb(1.,.5,.0);
-    cr->arc(origin.getX(), origin.getY(),350, 0, 2*M_PI);
-    cr->stroke();
-
-
-
+    // cr->set_source_rgb(1.,.5,.0);
+    // cr->arc(origin.getX(), origin.getY(),570, 0, 2*M_PI);
+    // cr->stroke();
     
     return true;
 }
 
-int runWindow(std::vector<Node>  &actors)
+int runWindow()
 {
     int argc = 0; 
     char** argv = {}; 
@@ -55,8 +108,8 @@ int runWindow(std::vector<Node>  &actors)
     window.set_title("Actors graph plot");
 
     CCanvas area;
-    area.actors = actors;
-    compute_graph_layout(area.actors);
+    area.nodes = get_sample_vector_nodes();
+    printVectorNodes(area.nodes);
 
     window.add(area);
     area.show();

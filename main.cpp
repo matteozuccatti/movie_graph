@@ -7,29 +7,7 @@
 
 int main(int argc, char** argv){
 
-    std::vector<std::pair<std::string, std::string>> movieVec; 
-    movieParser(movieVec);
-
-    std::vector<Actor> actors;
-    actorParser(movieVec,actors);
-    //printActorMap(actors);
-
-
-
-    Node n1,n2,n3,n4; 
-    n1.x0 = 350;    n1.x = Vector(100,20);
-    n2.x0 = 350;    n2.x = Vector(100,10);
-    n3.x0 = 350;    n3.x = Vector(100,-10); 
-    n4.x0 = 350;    n4.x = Vector(100,-20);
-
-
-    //std::vector<Node> act = {n1,n2,n3,n4};
-    std::vector<Node> act = {n1,n2,n3,n4};
-    runWindow(act); 
-
-
-    //testEuler();
-
+    runWindow();
     return 0; 
 }
 

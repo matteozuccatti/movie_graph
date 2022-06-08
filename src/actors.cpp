@@ -23,6 +23,10 @@ Vector Vector::times (double m) const{
                    this->getY()*m );
 }
 
+double Vector::dot(Vector &v){
+    return (this->getX()*v.getX()) + (this->getY()*v.getY());
+}
+
 // ======================================================================== //
 //                              ACTOR CLASS                                 //
 // ======================================================================== //
@@ -44,11 +48,16 @@ int Node::total_nodes = 0;
 std::vector<Node> get_sample_vector_nodes(){
 
     Node n1,n2,n3,n4; 
-    n1.x0 = 450;    n1.x = Vector( 300,  0);
-    n2.x0 = 450;    n2.x = Vector( 300,  50);
-    n3.x0 = 450;    n3.x = Vector(-100,   50); 
+    Node n5,n6,n7,n8; 
+    n1.x0 = 350;    n1.x = Vector( 300,  0);
+    n2.x0 = 650;    n2.x = Vector( 300,  50);       n2.size = 50;
+    n3.x0 = 450;    n3.x = Vector(-100,   50);      n3.size = 20;
     n4.x0 = 450;    n4.x = Vector(-300,-50);
-    std::vector<Node> nodes = {n1,n2,n3,n4}; 
+    n5.x0 = 250;    n5.x = Vector( 300,  0);
+    n6.x0 = 250;    n6.x = Vector( 300,  50);       n6.size = 20;
+    n7.x0 = 350;    n7.x = Vector(-100,   -50);     n7.size = 40;
+    n8.x0 = 450;    n8.x = Vector(-300,-50);
+    std::vector<Node> nodes = {n1,n2,n3,n4,n5,n6,n7,n8}; 
     
     return nodes; 
 }
@@ -73,7 +82,7 @@ void computeDamperForces(std::vector<Node> &nodes){
 
 void computeFrictionForces(std::vector<Node> &nodes){
     for(std::vector<Node>::iterator it=nodes.begin(); it!=nodes.end(); it++){
-        it->f_fri = it->x_dot.invert().normalize().times(10);
+        it->f_fri = it->x_dot.invert().normalize().times(1000);
     }
 }
 
@@ -82,11 +91,20 @@ void computeExternalForces(std::vector<Node> &nodes){
         it->f_ext = Vector(0.0,0.0);
         for(std::vector<Node>::iterator n=nodes.begin(); n!=nodes.end(); n++){
             if(!(*it == *n)){
-                if((it->x-n->x).getL() < 1){
-                    n->x += Vector(1,1);
-                }
+                
+                
+                
+                Vector dist = it->x - n->x; 
+                Vector norm = Vector(it->x.getX(), -it->x.getY()).normalize();  // unit vector normal to the spring direction
+                Vector proj = norm.times(norm.dot(dist)); 
 
-                it->f_ext += (it->x - n->x).times(5e4/((it->x-n->x).getL()));
+                if((it->x-n->x).getL() < 1){
+                    it->x += norm;
+                }
+                it->f_ext += (it->x - n->x).times(5e2*(n->size+10)/((it->x-n->x).getL()));
+                //it->f_ext += proj.times(n->size);
+                
+               
                 
             }
         }

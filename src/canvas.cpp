@@ -90,9 +90,6 @@ bool CCanvas::on_draw(Cairo::RefPtr<Cairo::Context> const & cr)
     cr->set_source_rgb(.7,.7,.7);
     cr->arc(origin.getX(), origin.getY(),25, 0, 2*M_PI);
     cr->fill();
-    // cr->set_source_rgb(1.,.5,.0);
-    // cr->arc(origin.getX(), origin.getY(),570, 0, 2*M_PI);
-    // cr->stroke();
     
     return true;
 }

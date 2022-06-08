@@ -7,6 +7,8 @@
 
 int main(int argc, char** argv){
 
+    std::cout << "Main Actor :" << argv[1] << "\n";
+
     runWindow();
     return 0; 
 }

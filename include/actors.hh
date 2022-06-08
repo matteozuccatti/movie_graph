@@ -39,6 +39,7 @@ public:
     Vector normalize();
     Vector invert();
     Vector times (double m) const;
+    double dot(Vector &v);
 
     // ------------------------------------------------------------------
 
@@ -69,21 +70,6 @@ public:
         Vector v = Vector(x_tmp,y_tmp);
         return v;
     }
-    /*
-    friend Vector operator*(Vector const &v1, const double m){
-        double new_x = v1.getX() * m ; 
-        double new_y = v1.getY() * m ; 
-        Vector v = Vector(new_x,new_y);
-        return v;
-    }
-    friend Vector operator/(Vector const &v1, const double m){
-        double new_x = v1.getX() / m ; 
-        double new_y = v1.getY() / m ; 
-        Vector v = Vector(new_x,new_y);
-        return v;
-    }
-    */
-
 };
 
 
@@ -111,7 +97,7 @@ public:
     // Physical properties == LINK  
     double k  = 1000;                    // spring coefficient
     double x0 = 200;                    // spring lenght neutral 
-    double c  = 25;                     // damper coefficient 
+    double c  = 50;                     // damper coefficient 
     // Graphical properties == NODE 
     double size = 10; 
 

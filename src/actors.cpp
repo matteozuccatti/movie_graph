@@ -150,7 +150,7 @@ void printActorMap(std::vector<Actor> &actors){
     std::cout<< "\n\n===================================================\n\n";
 
     std::vector<Actor>::iterator it = actors.begin(); 
-    while(it!=actors.end()){
+    while(it<actors.begin()+MAX_ACTORS){
         std::cout.width(26); std::cout<< std::left << it->actorName << "(";
         std::cout.width(8);  std::cout<< std::right << it->actorScore; 
         std::cout << ") | "; 
@@ -169,29 +169,24 @@ void printActorMap(std::vector<Actor> &actors){
 //                               NODE CLASS                                 //
 // ======================================================================== //
 
-
-
-// -----------------------
 // Static variable initialization
 int Node::total_nodes = 0;
 
 std::vector<Node> get_sample_vector_nodes(){
 
-    Node n1,n2,n3,n4; 
-    Node n5,n6,n7,n8; 
-    n1.x0 = 350;    n1.x = Vector( 300,  0);
-    n2.x0 = 650;    n2.x = Vector( 300,  50);       n2.size = 50;
-    n3.x0 = 450;    n3.x = Vector(-100,   50);      n3.size = 20;
-    n4.x0 = 450;    n4.x = Vector(-300,-50);
-    n5.x0 = 250;    n5.x = Vector( 300,  0);
-    n6.x0 = 250;    n6.x = Vector( 300,  50);       n6.size = 20;
-    n7.x0 = 350;    n7.x = Vector(-100,   -50);     n7.size = 40;
-    n8.x0 = 450;    n8.x = Vector(-300,-50);
-    std::vector<Node> nodes = {n1,n2,n3,n4,n5,n6,n7,n8}; 
-    
+    std::vector<std::pair<std::string, std::string>> movieVec; 
+    movieParser(movieVec);
+
+    std::vector<Actor> actors;
+    actorParser(movieVec,actors);
+
+    std::vector<Node> nodes(MAX_ACTORS);
+    actorToNodes(actors,nodes);
+
+    //printVectorNodes(nodes);
+
     return nodes; 
 }
-
 
 void updateLayout(std::vector<Node> &nodes){
    updateForces(nodes);
@@ -228,7 +223,7 @@ void computeExternalForces(std::vector<Node> &nodes){
                 if((it->x-n->x).getL() < 1){
                     it->x += norm;
                 }
-                it->f_ext += (it->x - n->x).times(5e2*(n->size+10)/((it->x-n->x).getL()));
+                it->f_ext += (it->x - n->x).times(5e2*(n->size+10)/((it->x-n->x).getL()+0.5));
             }
         }
     }
@@ -262,5 +257,42 @@ void updatePos(std::vector<Node> &nodes){
 void printVectorNodes(std::vector<Node> &nodes){
     for(std::vector<Node>::iterator it=nodes.begin(); it!=nodes.end(); it++){
         std::cout << *it << "\n"; 
+    }
+}
+
+// --------------------------------------------------------------------------
+
+int scoreToSize(double score){
+    int size = score/25;
+    return size;
+}
+
+double moviesToDistance(double common_movies){
+    return 25 + 50/common_movies;
+}
+
+void actorToNodes(std::vector<Actor> &actors, std::vector<Node> &nodes){
+    int i = 0; 
+
+    std::sort(actors.begin(), actors.end());
+
+    std::vector<Actor>::iterator a = actors.begin(); 
+    std::vector<Node>::iterator  n = nodes.begin(); 
+
+    while(i<MAX_ACTORS){
+        if(a->actorName != main_actor){
+            n->size = scoreToSize(a->actorScore); 
+            n->x0 = moviesToDistance(a->commonMovies_number); 
+            
+            double random_angle = (rand() % 300 +1)/100.0;
+            n->x = Vector(n->x0*cos(random_angle), n->x0*sin(random_angle));
+            n->name = a->actorName;
+
+            a++; 
+            n++; 
+            i++; 
+        }else{
+            a++;
+        }
     }
 }

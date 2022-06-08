@@ -79,7 +79,7 @@ bool CCanvas::on_draw(Cairo::RefPtr<Cairo::Context> const & cr)
 
         // line 
         cr->set_source_rgb(1.,.5,.0);
-        cr->set_line_width(3);
+        cr->set_line_width(2);
         cr->move_to(origin.getX(), origin.getY());
         cr->line_to(origin.getX()+it->x.getX(),
                     origin.getY()-it->x.getY());
@@ -88,7 +88,7 @@ bool CCanvas::on_draw(Cairo::RefPtr<Cairo::Context> const & cr)
     }
     
     cr->set_source_rgb(.7,.7,.7);
-    cr->arc(origin.getX(), origin.getY(),25, 0, 2*M_PI);
+    cr->arc(origin.getX(), origin.getY(),100, 0, 2*M_PI);
     cr->fill();
     
     return true;
@@ -106,7 +106,6 @@ int runWindow()
 
     CCanvas area;
     area.nodes = get_sample_vector_nodes();
-    printVectorNodes(area.nodes);
 
     window.add(area);
     area.show();

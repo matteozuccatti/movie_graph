@@ -8,6 +8,8 @@
 #include <typeinfo>
 #include "SQL_parser.hh"
 
+#define MAX_ACTORS 50
+
 // ======================================================================== //
 //                              VECTOR CLASS                                //
 // ======================================================================== //
@@ -144,12 +146,14 @@ public:
     double c  = 50;                     // damper coefficient 
     // Graphical properties == NODE 
     double size = 10; 
+    std::string name = ""; 
 
     // ----------------------------------------------------------------------
 
     friend std::ostream &operator<<(std::ostream &output, const Node &n ) {
         output << 
         "NODE id:"  << std::setw(2) <<  n.node_id       <<
+                       std::setw(15)<<  n.name          <<
         " p:["      << std::setw(6) <<  n.x.getX()      << 
         ","         << std::setw(6) <<  n.x.getY()      << 
         "]=>"       << std::setw(10)<<  n.x.getL()      <<
@@ -178,6 +182,10 @@ void updateForces(std::vector<Node> &nodes);
 void updatePos(std::vector<Node> &nodes);
 
 void printVectorNodes(std::vector<Node> &nodes);
+
+int scoreToSize(double score);
+double moviesToDistance(double common_movies);
+void actorToNodes(std::vector<Actor> &actors, std::vector<Node> &nodes);
 
 // ======================================================================== //
 

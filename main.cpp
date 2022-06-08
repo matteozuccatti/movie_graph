@@ -16,7 +16,10 @@ int main(int argc, char** argv){
     actorParser(movieVec,actors);
     printActorMap(actors);
 
-    //runWindow();
+    //std::vector<Node> nodes(MAX_ACTORS);
+    // actorToNodes(actors,nodes);
+    
+    runWindow();
     return 0; 
 }
 

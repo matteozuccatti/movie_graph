@@ -3,4 +3,5 @@
 
 include/CMakeFiles/SQL_parser.dir/__/src/SQL_parser.cpp.o
  /home/matteo/code/movie_graph/include/SQL_parser.hh
+ /home/matteo/code/movie_graph/include/actors.hh
  /home/matteo/code/movie_graph/src/SQL_parser.cpp

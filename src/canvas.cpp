@@ -52,6 +52,49 @@ bool CCanvas::updateGraph(int tick){
     return true;
 }
 
+SPoint draw_text(CairoCtx cr,
+                 SPoint const & pos,
+                 std::string const & crsText, 
+                 double const & dScale,
+                 bool const & label)
+{
+    cr->save();
+
+    Pango::FontDescription font;
+    cr->set_source_rgb(0.0,0.0,0.0);
+    font.set_family("Sans");
+    font.set_absolute_size(PANGO_SCALE*dScale);
+
+    CCanvas w;
+    auto layout = w.create_pango_layout(crsText);
+
+    layout->set_font_description(font);
+    int iWidth {0};
+    int iHeight{0};
+    SPoint tSize{.0,.0};
+
+    layout->get_pixel_size(iWidth, iHeight);
+    tSize = SPoint{iWidth, iHeight};
+
+    if (label)
+        {
+        cr->save();
+        Color(cr, WHITE, .75);
+        LineWidth(cr, {.0+iHeight});
+        //Line(cr, {{pos.x-tSize.x/2+tSize.y/4, pos.y},
+        //            {pos.x+tSize.x/2-tSize.y/4, pos.y}}); 
+        Line(cr, {{pos.x-tSize.x/2, pos.y},
+                    {pos.x+tSize.x/2, pos.y}}); 
+        cr->restore();
+        }
+
+    cr->move_to(pos.x-tSize.x/2, pos.y-tSize.y/2);
+    layout->show_in_cairo_context(cr);
+    cr->restore();
+
+    return std::move(tSize);
+}
+
 bool CCanvas::on_draw(Cairo::RefPtr<Cairo::Context> const & cr)
 {
     
@@ -67,29 +110,44 @@ bool CCanvas::on_draw(Cairo::RefPtr<Cairo::Context> const & cr)
     auto const height{ (double)allocation.get_height() };
     Vector origin = Vector(width/2, height/2);
     
+    std::vector<Node>::iterator main; 
 
     for(std::vector<Node>::iterator it=nodes.begin(); it!=nodes.end(); it++){
-        // Normal nodes 
-        // circle orange
-        cr->set_source_rgb(1.,.5,.0);
-        cr->arc(origin.getX()+it->x.getX(),
-                origin.getY()-it->x.getY(),
-                it->size, 0, 2*M_PI);
-        cr->fill();
-
-        // line 
-        cr->set_source_rgb(1.,.5,.0);
-        cr->set_line_width(2);
-        cr->move_to(origin.getX(), origin.getY());
-        cr->line_to(origin.getX()+it->x.getX(),
-                    origin.getY()-it->x.getY());
-        cr->stroke();
-        
+        if(it->name != main_actor){
+            // Normal nodes 
+            // * line 
+            cr->set_source_rgb(1.,.5,.0);
+            cr->set_line_width(1);
+            cr->move_to(origin.getX(), origin.getY());
+            cr->line_to(origin.getX()+it->x.getX(),
+                        origin.getY()-it->x.getY());
+            cr->stroke();
+        }else{
+            main = it; 
+        }
     }
-    
+
+    for(std::vector<Node>::iterator it=nodes.begin(); it!=nodes.end(); it++){
+        if(it->name != main_actor){
+            // Normal nodes 
+            // * circle orange
+            cr->set_source_rgb(1.,.5,.0);
+            cr->arc(origin.getX()+it->x.getX(),
+                    origin.getY()-it->x.getY(),
+                    it->size, 0, 2*M_PI);
+            cr->fill();
+            SPoint node_center = SPoint(origin.getX()+it->x.getX(),origin.getY()-it->x.getY()-it->size*1.5);
+            draw_text(cr,node_center, it->name,it->size/2,true);
+        }else{
+            main = it; 
+        }
+    }
+
     cr->set_source_rgb(.7,.7,.7);
-    cr->arc(origin.getX(), origin.getY(),100, 0, 2*M_PI);
+    cr->arc(origin.getX(), origin.getY(),main->size, 0, 2*M_PI);
     cr->fill();
+    draw_text(cr,SPoint(origin.getX(),origin.getY()-main->size*1.5), 
+                main->name,main->size,true);
     
     return true;
 }

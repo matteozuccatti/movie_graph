@@ -4,6 +4,7 @@
 include/CMakeFiles/canvas.dir/__/src/canvas.cpp.o: ../include/SQL_parser.hh
 include/CMakeFiles/canvas.dir/__/src/canvas.cpp.o: ../include/actors.hh
 include/CMakeFiles/canvas.dir/__/src/canvas.cpp.o: ../include/canvas.h
+include/CMakeFiles/canvas.dir/__/src/canvas.cpp.o: ../include/typesNmath.h
 include/CMakeFiles/canvas.dir/__/src/canvas.cpp.o: ../src/canvas.cpp
 include/CMakeFiles/canvas.dir/__/src/canvas.cpp.o: /usr/include/atk-1.0/atk/atk-enum-types.h
 include/CMakeFiles/canvas.dir/__/src/canvas.cpp.o: /usr/include/atk-1.0/atk/atk.h

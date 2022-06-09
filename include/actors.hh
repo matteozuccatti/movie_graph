@@ -8,7 +8,8 @@
 #include <typeinfo>
 #include "SQL_parser.hh"
 
-#define MAX_ACTORS 50
+
+#define MAX_ACTORS 150
 
 // ======================================================================== //
 //                              VECTOR CLASS                                //
@@ -80,6 +81,9 @@ public:
 // ======================================================================== //
 
 static std::string main_actor = "Leonardo DiCaprio"; 
+//static std::string main_actor = "Brad Pitt";
+
+
 class Actor{
 public:
     Actor(std::string actorId_ , std::string actorName_ )
@@ -141,9 +145,9 @@ public:
     
 
     // Physical properties == LINK  
-    double k  = 1000;                    // spring coefficient
+    double k  = 1550;                    // spring coefficient
     double x0 = 200;                    // spring lenght neutral 
-    double c  = 50;                     // damper coefficient 
+    double c  = 100;                     // damper coefficient 
     // Graphical properties == NODE 
     double size = 10; 
     std::string name = ""; 

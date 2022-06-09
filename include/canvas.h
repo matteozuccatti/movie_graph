@@ -6,40 +6,12 @@
 #include <gtkmm/window.h>
 #include "actors.hh"
 #include <vector>
+#include "typesNmath.h"
+
+using CairoCtx = Cairo::RefPtr<Cairo::Context> const &;
 
 
-struct SPoint
-{
-    SPoint() = default;
-    SPoint(SPoint const & src) = default;
-    template<typename T>
-        SPoint(T const & x, T const & y) : x(x), y(y) {}
-    template<typename T>
-        SPoint(T const & t) : x(t.x), y(t.y) {}
-    double x{0}, y{0};
-    template<typename P>
-        SPoint operator = (P const & p)
-            {
-            x = p.x;
-            y = p.y;
-            return *this;
-            }
-    template<typename P>
-        SPoint operator -= (P const & p)
-            {
-            x -= p.x;
-            y -= p.y;
-            return *this;
-            }
-    template<typename P>
-        SPoint operator += (P const & p)
-            {
-            x += p.x;
-            y += p.y;
-            return *this;
-            }
-};
-
+/*
 inline bool operator == (SPoint const & p1, SPoint const & p2)
 {
     return (p1.x==p2.x) && (p1.y==p2.y);
@@ -69,38 +41,110 @@ inline SPoint operator * (SPoint const & p, double const & d)
 {
     return {p.x*d, p.y*d};
 }
+*/
+
+inline void LineWidth( CairoCtx cr, SLineWidth const & w, double const & s=1 )
+        {
+        cr->set_line_width(w.w / ((s==0)?1:s));
+        }
+
+inline void Color( CairoCtx cr, SColor const & c )
+        {
+        cr->set_source_rgb( c.r, c.g, c.b );
+        }
+
+inline void Color( CairoCtx cr, SColor const & c, double const & a )
+        {
+        cr->set_source_rgba( c.r, c.g, c.b, a );
+        }
+
+inline void Color( CairoCtx cr, double const & r, double const & g, double const & b )
+        {
+        cr->set_source_rgb( r, g, b );
+        }
+
+inline void Color( CairoCtx cr, double const & r, double const & g, double const & b, double const & a )
+        {
+        cr->set_source_rgba( r, g, b, a );
+        }
+
+template<typename P>
+    void MoveTo(CairoCtx cr, P const & tPoint)
+        {
+        cr->move_to(tPoint.x, tPoint.y);
+        }
+
+template<typename P>
+    void LineTo(CairoCtx cr, P const & tPoint)
+        {
+        cr->line_to(tPoint.x, tPoint.y);
+        }
+
+inline void Line(CairoCtx cr, SLine const & tLine )
+        {
+        MoveTo(cr, tLine.a);
+        LineTo(cr, tLine.b);
+        cr->stroke();
+        }
+
+template<typename C>
+    void LineStrip(CairoCtx cr, C const & tPoints )
+        {
+        bool b{true};
+        for ( auto const & a:tPoints )
+            {
+            if (b)
+                {
+                MoveTo(cr, a);
+                b = false;
+                }
+            else
+                {
+                LineTo(cr, a);
+                }
+            }
+        cr->stroke();
+        }
+
+template<typename P>
+    void Circle(CairoCtx cr, P const & tPoint, double const & dRadius )
+        {
+        cr->arc(tPoint.x, tPoint.y, dRadius, 0, 2*M_PI);
+        cr->fill();
+        }
+
+template<typename P>
+    void Ring(CairoCtx cr, P const & tPoint, double const & dRadius )
+        {
+        cr->arc(tPoint.x, tPoint.y, dRadius, 0, 2*M_PI);
+        cr->stroke();
+        }
+
+template<typename P, typename S>
+    void Rectangle(CairoCtx cr, P const & tPoint, S const & tSize )
+        {
+        cr->rectangle(tPoint.x, tPoint.y, tSize.x, tSize.y);
+        cr->fill();
+        }
+
+template<typename P, typename S>
+    void Frame(CairoCtx cr, P const & tPoint, S const & tSize )
+        {
+        cr->rectangle(tPoint.x, tPoint.y, tSize.x, tSize.y);
+        cr->stroke();
+        }
+
+SPoint draw_text(CairoCtx cr,
+                 SPoint const & pos,
+                 std::string const & crsText, 
+                 double const & dScale = 1.0,
+                 bool const & label = false);
 
 
-struct SFleck
-{
-    double x{0}, y{0}, r{0};
-    template<typename P>
-        SFleck operator -= (P const & p)
-            {
-            x -= p.x;
-            y -= p.y;
-            return *this;
-            }
-    template<typename P>
-        SFleck operator += (P const & p)
-            {
-            x += p.x;
-            y += p.y;
-            return *this;
-            }
-    template<typename P>
-        SFleck operator = (P const & p)
-            {
-            x = p.x;
-            y = p.y;
-            return *this;
-            }
-};
 
-struct SColor
-{
-    double r{0},g{0},b{0};
-};
+
+
+
 
 class CCanvas : public Gtk::DrawingArea
 {

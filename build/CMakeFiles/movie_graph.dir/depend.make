@@ -4,6 +4,7 @@
 CMakeFiles/movie_graph.dir/main.cpp.o: ../include/SQL_parser.hh
 CMakeFiles/movie_graph.dir/main.cpp.o: ../include/actors.hh
 CMakeFiles/movie_graph.dir/main.cpp.o: ../include/canvas.h
+CMakeFiles/movie_graph.dir/main.cpp.o: ../include/typesNmath.h
 CMakeFiles/movie_graph.dir/main.cpp.o: ../main.cpp
 CMakeFiles/movie_graph.dir/main.cpp.o: /usr/include/atk-1.0/atk/atk-enum-types.h
 CMakeFiles/movie_graph.dir/main.cpp.o: /usr/include/atk-1.0/atk/atk.h

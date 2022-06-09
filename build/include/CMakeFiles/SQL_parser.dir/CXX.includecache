@@ -22,7 +22,25 @@ vector
 map
 -
 
+/home/matteo/code/movie_graph/include/actors.hh
+string
+-
+stdlib.h
+-
+vector
+-
+iostream
+-
+math.h
+-
+typeinfo
+-
+SQL_parser.hh
+/home/matteo/code/movie_graph/include/SQL_parser.hh
+
 /home/matteo/code/movie_graph/src/SQL_parser.cpp
 ../include/SQL_parser.hh
 /home/matteo/code/movie_graph/include/SQL_parser.hh
+../include/actors.hh
+/home/matteo/code/movie_graph/include/actors.hh
 

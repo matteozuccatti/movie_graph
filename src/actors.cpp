@@ -207,7 +207,7 @@ void computeDamperForces(std::vector<Node> &nodes){
 
 void computeFrictionForces(std::vector<Node> &nodes){
     for(std::vector<Node>::iterator it=nodes.begin(); it!=nodes.end(); it++){
-        it->f_fri = it->x_dot.invert().normalize().times(1000);
+        it->f_fri = it->x_dot.invert().normalize().times(1e3);
     }
 }
 
@@ -220,10 +220,11 @@ void computeExternalForces(std::vector<Node> &nodes){
                 Vector norm = Vector(it->x.getX(), -it->x.getY()).normalize();  // unit vector normal to the spring direction
                 Vector proj = norm.times(norm.dot(dist)); 
 
-                if((it->x-n->x).getL() < 1){
-                    it->x += norm;
-                }
-                it->f_ext += (it->x - n->x).times(5e2*(n->size+10)/((it->x-n->x).getL()+0.5));
+                double true_dist = dist.getL() - it->size/2 - n->size;
+                if(true_dist < 0.1)
+                    true_dist = 0.1;
+
+                it->f_ext += (it->x - n->x).times(5e2*(n->size+5)/true_dist);
             }
         }
     }
@@ -263,12 +264,12 @@ void printVectorNodes(std::vector<Node> &nodes){
 // --------------------------------------------------------------------------
 
 int scoreToSize(double score){
-    int size = score/25;
+    int size = pow(score,1.7)/1e4;
     return size;
 }
 
 double moviesToDistance(double common_movies){
-    return 25 + 50/common_movies;
+    return 20 + 50/common_movies;
 }
 
 void actorToNodes(std::vector<Actor> &actors, std::vector<Node> &nodes){
@@ -280,7 +281,7 @@ void actorToNodes(std::vector<Actor> &actors, std::vector<Node> &nodes){
     std::vector<Node>::iterator  n = nodes.begin(); 
 
     while(i<MAX_ACTORS){
-        if(a->actorName != main_actor){
+        //if(a->actorName != main_actor){
             n->size = scoreToSize(a->actorScore); 
             n->x0 = moviesToDistance(a->commonMovies_number); 
             
@@ -291,8 +292,8 @@ void actorToNodes(std::vector<Actor> &actors, std::vector<Node> &nodes){
             a++; 
             n++; 
             i++; 
-        }else{
-            a++;
-        }
+        //}else{
+        //    a++;
+        //}
     }
 }

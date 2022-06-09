@@ -51,6 +51,10 @@ actors.hh
 /home/matteo/code/movie_graph/include/actors.hh
 vector
 -
+typesNmath.h
+/home/matteo/code/movie_graph/include/typesNmath.h
+
+/home/matteo/code/movie_graph/include/typesNmath.h
 
 /home/matteo/code/movie_graph/src/canvas.cpp
 ../include/canvas.h

@@ -51,6 +51,10 @@ actors.hh
 ../include/actors.hh
 vector
 -
+typesNmath.h
+../include/typesNmath.h
+
+../include/typesNmath.h
 
 /home/matteo/code/movie_graph/main.cpp
 SQL_parser.hh

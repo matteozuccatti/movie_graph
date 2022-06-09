@@ -1,7 +1,7 @@
 //https://www.databasestar.com/sample-database-movies/
 
 #include "../include/SQL_parser.hh"
-
+#include "../include/actors.hh"
 /*
     Setup connection with a given SQL file 
 */
@@ -46,7 +46,17 @@ void movieParser(std::vector<std::pair<std::string, std::string>> &movieVec){
     con = mysql_connection_setup(mysqlD);
 
     // get the results from executing commands
-    res = mysql_perform_query(con, "select movie_id,title from movie where movie_id in (select movie_id from movie_cast where person_id =  (select person_id from person where person_name = \"Leonardo DiCaprio\"));");
+    const char *sql_query1 = "select movie_id,title from movie where movie_id in (select movie_id from movie_cast where person_id =  (select person_id from person where person_name = \"";
+    const char *sql_query2 = "\"));";
+
+    char sql_query_tmp[250];
+    std::strcpy(sql_query_tmp,sql_query1); 
+    std::strcat(sql_query_tmp,main_actor.c_str()); 
+    std::strcat(sql_query_tmp,sql_query2); 
+    const char *sql_query = sql_query_tmp; 
+
+    res = mysql_perform_query(con, sql_query);
+    //res = mysql_perform_query(con, "select movie_id,title from movie where movie_id in (select movie_id from movie_cast where person_id =  (select person_id from person where person_name = \"Leonardo DiCaprio\"));");
 
     while ((row = mysql_fetch_row(res)) != NULL){
         movieVec.push_back(std::make_pair(row[0],row[1]));

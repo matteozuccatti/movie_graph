@@ -189,8 +189,9 @@ std::vector<Node> get_sample_vector_nodes(){
 }
 
 void updateLayout(std::vector<Node> &nodes){
-   updateForces(nodes);
-   updatePos(nodes);
+    updateForces(nodes);
+    updatePos(nodes);
+    //printVectorNodes(nodes);
 }
 
 void computeSpringForces(std::vector<Node> &nodes){
@@ -245,12 +246,20 @@ void updateForces(std::vector<Node> &nodes){
 }
 
 void updatePos(std::vector<Node> &nodes){
-    double dT = 0.01; 
+    double dT = 0.005; 
     
     for(std::vector<Node>::iterator it=nodes.begin(); it!=nodes.end(); it++){
         it->x     = it->x     + it->x_dot.times(dT); 
         it->x_dot = it->x_dot + it->f_tot.times(dT);
     }
+}
+
+bool keepUpdating(std::vector<Node> &nodes){
+    for(std::vector<Node>::iterator it=nodes.begin(); it!=nodes.end(); it++){
+        if(it->x_dot.getL() > 11)
+            return true;   
+    }
+    return false;
 }
 
 // --------------------------------------------------------------------------
@@ -265,6 +274,8 @@ void printVectorNodes(std::vector<Node> &nodes){
 
 int scoreToSize(double score){
     int size = pow(score,1.7)/1e4;
+    if (size<3)
+        size = 3;
     return size;
 }
 
@@ -281,19 +292,104 @@ void actorToNodes(std::vector<Actor> &actors, std::vector<Node> &nodes){
     std::vector<Node>::iterator  n = nodes.begin(); 
 
     while(i<MAX_ACTORS){
-        //if(a->actorName != main_actor){
             n->size = scoreToSize(a->actorScore); 
             n->x0 = moviesToDistance(a->commonMovies_number); 
-            
+
             double random_angle = (rand() % 300 +1)/100.0;
             n->x = Vector(n->x0*cos(random_angle), n->x0*sin(random_angle));
+
             n->name = a->actorName;
+            n->common_movies = a->commonMovies;
 
             a++; 
             n++; 
             i++; 
-        //}else{
-        //    a++;
-        //}
     }
 }
+
+SColor colorIndex(int i){
+    switch(i){
+        case 0: 
+            return SColor{139/255,0,0};
+        case 1: 
+            return SColor{178.0/255,34.0/255,34.0/255};
+        case 2: 
+            return SColor{255.0/255,0/255,0/255};
+        case 3: 
+            return SColor{255.0/255,99.0/255,71.0/255};
+        case 4: 
+            return SColor{205.0/255,92.0/255,92.0/255};
+        case 5: 
+            return SColor{233.0/255,150.0/255,122.0/255};
+        case 6: 
+            return SColor{255.0/255,160.0/255,122.0/255};
+        case 7: 
+            return SColor{255.0/255,69.0/255,0/255};
+        case 8: 
+            return SColor{255.0/255,140.0/255,0.0/255};
+        case 9: 
+            return SColor{255.0/255,215.0/255,0.0/255};
+        case 10: 
+            return SColor{218.0/255,165.0/255,32.0/255};
+        case 11: 
+            return SColor{154.0/255,205.0/255,50.0/255}; 
+        case 12: 
+            return SColor{107.0/255,155.0/255,45.0/255};
+        case 13: 
+            return SColor{173.0/255,252.0/255,47.0/255};
+        case 14: 
+            return SColor{0.0/255,120.0/255,0.0/255};
+        case 15: 
+            return SColor{34.0/255,140.0/255,34.0/255};
+        case 16: 
+            return SColor{50.0/255,205.0/255,50.0/255};
+        case 17: 
+            return SColor{0.0/255,250.0/255,154.0/255};
+        case 18: 
+            return SColor{102.0/255,205.0/255,170.0/255};
+        case 19: 
+            return SColor{32.0/255,178.0/255,171.0/255};
+        case 20: 
+            return SColor{0.0/255,139.0/255,139.0/255};
+        case 21: 
+            return SColor{0.0/255,255.0/255,240.0/255};
+        case 22: 
+            return SColor{70.0/255,130.0/255,180.0/255};
+        case 23: 
+            return SColor{30.0/255,120.0/255,240.0/255};
+        case 24: 
+            return SColor{0.0/255,0.0/255,140.0/255};
+        case 25: 
+            return SColor{0.0/255,0.0/255,255.0/255};
+        case 26: 
+            return SColor{32.0/255,178.0/255,170.0/255};
+        case 27: 
+            return SColor{138.0/255,43.0/255,230.0/255};
+        case 28: 
+            return SColor{139.0/255,0/255,139.0/255};
+        case 29: 
+            return SColor{255.0/255,0/255,255.0/255};
+        case 30: 
+            return SColor{210.0/255,105.0/255,30.0/255};
+        default:
+            std::cout << "Movie n." << i << "\n"; 
+            return SColor{1,1,1};
+    }
+}
+
+SColor getColorForMovie(std::string movieName, std::vector<std::pair<std::string, std::string>> &movies){
+    for(int i=0; i<movies.size(); i++){
+        if(movieName == movies[i].second)
+            return colorIndex(i); 
+    }
+    std::cout << "No movie called " << movieName << "\n";
+    return colorIndex(-1);
+}
+
+
+
+
+
+
+
+

@@ -37,6 +37,8 @@ typeinfo
 -
 SQL_parser.hh
 ../include/SQL_parser.hh
+typesNmath.h
+../include/typesNmath.h
 
 ../include/canvas.h
 gtkmm.h

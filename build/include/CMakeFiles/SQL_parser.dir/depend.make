@@ -3,5 +3,6 @@
 
 include/CMakeFiles/SQL_parser.dir/__/src/SQL_parser.cpp.o: ../include/SQL_parser.hh
 include/CMakeFiles/SQL_parser.dir/__/src/SQL_parser.cpp.o: ../include/actors.hh
+include/CMakeFiles/SQL_parser.dir/__/src/SQL_parser.cpp.o: ../include/typesNmath.h
 include/CMakeFiles/SQL_parser.dir/__/src/SQL_parser.cpp.o: ../src/SQL_parser.cpp
 

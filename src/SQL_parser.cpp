@@ -69,3 +69,15 @@ void movieParser(std::vector<std::pair<std::string, std::string>> &movieVec){
 }
 
 
+
+void moviePrinter(std::vector<std::pair<std::string, std::string>> &movieVec){
+    std::vector<std::pair<std::string, std::string>>::iterator it = movieVec.begin(); 
+
+    std::cout << "Movie list : \n";
+    while (it!=movieVec.end())
+    {
+        std::cout << it->second << "\n";
+        it++;
+    }
+    std::cout << "\n";   
+}

@@ -7,6 +7,7 @@
 #include <math.h>
 #include <typeinfo>
 #include "SQL_parser.hh"
+#include "typesNmath.h"
 
 
 #define MAX_ACTORS 150
@@ -81,7 +82,7 @@ public:
 // ======================================================================== //
 
 static std::string main_actor = "Leonardo DiCaprio"; 
-//static std::string main_actor = "Brad Pitt";
+//static std::string main_actor = "Bruce Willis";
 
 
 class Actor{
@@ -137,7 +138,7 @@ public:
     }
     // State variables
     Vector x_ddot = Vector(0.0,0.0); 
-    Vector x_dot  = Vector(0.0,0.0); 
+    Vector x_dot  = Vector(0.1,0.0); 
     Vector x      = Vector(50,0.0); 
 
     // Vector forces
@@ -147,10 +148,13 @@ public:
     // Physical properties == LINK  
     double k  = 1550;                    // spring coefficient
     double x0 = 200;                    // spring lenght neutral 
-    double c  = 100;                     // damper coefficient 
+    double c  = 150;                     // damper coefficient 
     // Graphical properties == NODE 
-    double size = 10; 
+    double size = 10;
+
+    // Actor related variables  
     std::string name = ""; 
+    std::vector<std::string> common_movies; 
 
     // ----------------------------------------------------------------------
 
@@ -184,12 +188,15 @@ void computeTotForces(std::vector<Node> &nodes);
 void updateLayout(std::vector<Node> &nodes);
 void updateForces(std::vector<Node> &nodes);
 void updatePos(std::vector<Node> &nodes);
+bool keepUpdating(std::vector<Node> &nodes);
 
 void printVectorNodes(std::vector<Node> &nodes);
 
 int scoreToSize(double score);
 double moviesToDistance(double common_movies);
 void actorToNodes(std::vector<Actor> &actors, std::vector<Node> &nodes);
+SColor colorIndex(int i);
+SColor getColorForMovie(std::string movieName, std::vector<std::pair<std::string, std::string>> &movies); 
 
 // ======================================================================== //
 

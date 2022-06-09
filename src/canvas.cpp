@@ -116,12 +116,16 @@ bool CCanvas::on_draw(Cairo::RefPtr<Cairo::Context> const & cr)
         if(it->name != main_actor){
             // Normal nodes 
             // * line 
-            cr->set_source_rgb(1.,.5,.0);
-            cr->set_line_width(1);
-            cr->move_to(origin.getX(), origin.getY());
-            cr->line_to(origin.getX()+it->x.getX(),
-                        origin.getY()-it->x.getY());
-            cr->stroke();
+            for(int mov=0; mov<it->common_movies.size(); mov++){
+                SColor colorMovie = getColorForMovie(it->common_movies[mov],movies);
+                Color(cr, colorMovie, 1);
+                cr->set_line_width((it->common_movies.size()-mov)*2-1);
+                cr->move_to(origin.getX(), origin.getY());
+                cr->line_to(origin.getX()+it->x.getX(),
+                            origin.getY()-it->x.getY());
+                cr->stroke();
+            }
+            
         }else{
             main = it; 
         }
@@ -131,13 +135,18 @@ bool CCanvas::on_draw(Cairo::RefPtr<Cairo::Context> const & cr)
         if(it->name != main_actor){
             // Normal nodes 
             // * circle orange
-            cr->set_source_rgb(1.,.5,.0);
-            cr->arc(origin.getX()+it->x.getX(),
-                    origin.getY()-it->x.getY(),
-                    it->size, 0, 2*M_PI);
-            cr->fill();
+            for(int mov=0; mov<it->common_movies.size(); mov++){
+                SColor colorMovie = getColorForMovie(it->common_movies[mov],movies);
+                Color(cr, colorMovie, 1);
+                cr->arc(origin.getX()+it->x.getX(),
+                        origin.getY()-it->x.getY(),
+                        it->size*(it->common_movies.size()-mov)/it->common_movies.size(), 0, 2*M_PI);
+                cr->fill();
+            }
+
             SPoint node_center = SPoint(origin.getX()+it->x.getX(),origin.getY()-it->x.getY()-it->size*1.5);
             draw_text(cr,node_center, it->name,it->size/2,true);
+
         }else{
             main = it; 
         }
@@ -159,11 +168,15 @@ int runWindow()
     auto app = Gtk::Application::create(argc, argv, "org.gtkmm.cairo.tut");
 
     Gtk::Window window;
-    window.set_default_size(1920,1080);
+    window.set_default_size(1080,1080);
     window.set_title("Actors graph plot");
 
     CCanvas area;
     area.nodes = get_sample_vector_nodes();
+
+    std::vector<std::pair<std::string, std::string>> movieVec; 
+    movieParser(movieVec);
+    area.movies = movieVec;
 
     window.add(area);
     area.show();

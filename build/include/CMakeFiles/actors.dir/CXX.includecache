@@ -37,6 +37,10 @@ typeinfo
 -
 SQL_parser.hh
 /home/matteo/code/movie_graph/include/SQL_parser.hh
+typesNmath.h
+/home/matteo/code/movie_graph/include/typesNmath.h
+
+/home/matteo/code/movie_graph/include/typesNmath.h
 
 /home/matteo/code/movie_graph/src/actors.cpp
 ../include/actors.hh

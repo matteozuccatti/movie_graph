@@ -136,7 +136,7 @@ SColor constexpr DARKBLUE   {.0,.0,.6};
 SColor constexpr DARKCYAN   {.0,.6,.6};
 SColor constexpr DARKMAGENTA{.6,.0,.6};
 SColor constexpr DARKYELLOW {.6,.6,.0};
-SColor constexpr GRAY       {.6,.6,.6};
+SColor constexpr GRAY       {.7,.7,.7};
 SColor constexpr RED        {1,0,0};
 SColor constexpr GREEN      {0,1,0};
 SColor constexpr BLUE       {0,0,1};

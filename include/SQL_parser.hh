@@ -18,3 +18,4 @@ MYSQL* mysql_connection_setup(struct connection_details mysql_details);
 MYSQL_RES* mysql_perform_query(MYSQL *connection, const char *sql_query);
 
 void movieParser(std::vector<std::pair<std::string, std::string>> &movieVec);
+void moviePrinter(std::vector<std::pair<std::string, std::string>> &movieVec);

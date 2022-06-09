@@ -11,6 +11,7 @@ int main(int argc, char** argv){
 
     std::vector<std::pair<std::string, std::string>> movieVec; 
     movieParser(movieVec);
+    moviePrinter(movieVec);
 
     std::vector<Actor> actors;
     actorParser(movieVec,actors);

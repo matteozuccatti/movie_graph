@@ -142,7 +142,7 @@ SPoint draw_text(CairoCtx cr,
 
 
 
-
+// ==================================================================================================
 
 
 
@@ -166,6 +166,7 @@ public:
         };
 
     std::vector<Node> nodes;
+    std::vector<std::pair<std::string, std::string>> movies;
 
 protected:
     // Override default signal handler:
